@@ -1,0 +1,44 @@
+﻿<Window x:Class="MenadzerRoslin.DodajZabiegWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj zabieg" Height="350" Width="400"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Dodaj nowy zabieg" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Roślina:"/>
+            <TextBlock x:Name="RoslinaTextBlock" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Typ zabiegu:"/>
+            <ComboBox x:Name="TypZabieguComboBox" Margin="0,0,0,10">
+                <ComboBoxItem Content="Podlewanie"/>
+                <ComboBoxItem Content="Nawożenie"/>
+                <ComboBoxItem Content="Przesadzanie"/>
+                <ComboBoxItem Content="Przycinanie"/>
+                <ComboBoxItem Content="Spryskiwanie"/>
+                <ComboBoxItem Content="Czyszczenie liści"/>
+                <ComboBoxItem Content="Inne"/>
+            </ComboBox>
+
+            <TextBlock Text="Data wykonania:"/>
+            <DatePicker x:Name="DataWykonaniaDatePicker" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Opis:"/>
+            <TextBox x:Name="OpisTextBox" Height="60" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+            <CheckBox x:Name="DodajPrzypomnienieCheckBox" Content="Dodaj przypomnienie o następnym zabiegu" IsChecked="True"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Anuluj" IsCancel="True" Width="80" Margin="0,0,10,0"/>
+            <Button Content="Dodaj" IsDefault="True" Width="80" Click="DodajButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

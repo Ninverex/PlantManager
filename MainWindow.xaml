@@ -5,8 +5,196 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MenadzerRoslin"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Menadżer Roślin Domowych" Height="650" Width="1000"
+        WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <!-- Nagłówek aplikacji -->
+        <Border Grid.Row="0" Background="#4CAF50" Padding="10">
+            <StackPanel>
+                <TextBlock Text="🌱 Menadżer Roślin Domowych" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Dbaj o swoje rośliny z łatwością" FontSize="14" Foreground="White" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Główna zawartość -->
+        <TabControl Grid.Row="1" Margin="10">
+            <TabItem Header="Moje Rośliny">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Lista roślin -->
+                    <ListView x:Name="RoslinyListView" Grid.Column="0" Margin="0,0,10,0" SelectionChanged="RoslinyListView_SelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Nazwa}" Width="150"/>
+                                <GridViewColumn Header="Gatunek" DisplayMemberBinding="{Binding Gatunek.NazwaGatunku}" Width="150"/>
+                                <GridViewColumn Header="Miejsce" DisplayMemberBinding="{Binding Miejsce}" Width="100"/>
+                                <GridViewColumn Header="Data zakupu" DisplayMemberBinding="{Binding DataZakupu, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- Panel szczegółów rośliny -->
+                    <Grid Grid.Column="1" Width="300">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Szczegóły rośliny" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                        <StackPanel Grid.Row="1" x:Name="SzczegolyPanel" Visibility="Collapsed">
+                            <TextBlock Text="Nazwa:" FontWeight="Bold"/>
+                            <TextBlock x:Name="NazwaTextBlock" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Gatunek:" FontWeight="Bold"/>
+                            <TextBlock x:Name="GatunekTextBlock" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Miejsce:" FontWeight="Bold"/>
+                            <TextBlock x:Name="MiejsceTextBlock" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Data zakupu:" FontWeight="Bold"/>
+                            <TextBlock x:Name="DataZakupuTextBlock" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Wymagania:" FontWeight="Bold"/>
+                            <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Historia zabiegów:" FontWeight="Bold"/>
+                            <ListView x:Name="ZabiegiListView" Height="100" Margin="0,0,0,10">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataWykonania, StringFormat=\{0:dd.MM.yyyy\}}" Width="80"/>
+                                        <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding TypZabiegu}" Width="100"/>
+                                        <GridViewColumn Header="Opis" DisplayMemberBinding="{Binding Opis}" Width="100"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                            <Button Content="Dodaj zabieg" Click="DodajZabieg_Click" Margin="0,0,0,10"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Dodaj roślinę" Click="DodajRosline_Click" Margin="0,0,10,0"/>
+                            <Button Content="Edytuj" Click="EdytujRosline_Click" x:Name="EdytujButton" IsEnabled="False"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Do zrobienia dzisiaj">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Zaplanowane zabiegi na dziś" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                    <ListView Grid.Row="1" x:Name="PrzypomnieniaDzisListView">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Roślina" DisplayMemberBinding="{Binding Roslina.Nazwa}" Width="150"/>
+                                <GridViewColumn Header="Zabieg" DisplayMemberBinding="{Binding TypZabiegu}" Width="120"/>
+                                <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataPlanowana, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                                <GridViewColumn Header="Status" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding CzyWykonane}" Click="Przypomnienie_Checked"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Wszystkie przypomnienia">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Wszystkie zaplanowane zabiegi" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                    <ListView Grid.Row="1" x:Name="PrzypomnieniaPelneListView">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Roślina" DisplayMemberBinding="{Binding Roslina.Nazwa}" Width="150"/>
+                                <GridViewColumn Header="Zabieg" DisplayMemberBinding="{Binding TypZabiegu}" Width="120"/>
+                                <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataPlanowana, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
+                                <GridViewColumn Header="Status" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding CzyWykonane}" Click="Przypomnienie_Checked"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Gatunki">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Lista gatunków -->
+                    <ListView x:Name="GatunkiListView" Grid.Column="0" Margin="0,0,10,0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Nazwa gatunku" DisplayMemberBinding="{Binding NazwaGatunku}" Width="200"/>
+                                <GridViewColumn Header="Podlewanie co (dni)" DisplayMemberBinding="{Binding WymagaNawadnianiaCoIleDni}" Width="120"/>
+                                <GridViewColumn Header="Nawożenie co (dni)" DisplayMemberBinding="{Binding WymagaNawozeniaCoIleDni}" Width="120"/>
+                                <GridViewColumn Header="Światło" DisplayMemberBinding="{Binding Swiatlo}" Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- Panel dodawania gatunku -->
+                    <StackPanel Grid.Column="1" Width="250">
+                        <TextBlock Text="Dodaj nowy gatunek" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Nazwa gatunku:"/>
+                        <TextBox x:Name="NazwaGatunkuTextBox" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Podlewanie co (dni):"/>
+                        <TextBox x:Name="PodlewanieTextBox" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Nawożenie co (dni):"/>
+                        <TextBox x:Name="NawozenieTextBox" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Światło:"/>
+                        <ComboBox x:Name="SwiatloComboBox" Margin="0,0,0,10">
+                            <ComboBoxItem Content="pełne"/>
+                            <ComboBoxItem Content="półcień"/>
+                            <ComboBoxItem Content="cień"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Temperatura min (°C):"/>
+                        <TextBox x:Name="TempMinTextBox" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Temperatura max (°C):"/>
+                        <TextBox x:Name="TempMaxTextBox" Margin="0,0,0,10"/>
+
+                        <Button Content="Dodaj gatunek" Click="DodajGatunek_Click" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
