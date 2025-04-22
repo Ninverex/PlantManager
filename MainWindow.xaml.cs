@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
 using MenadzerRoslin.Data;
 using MenadzerRoslin.Models;
+using MenadzerRoslin.Views;
 
 namespace MenadzerRoslin
 {
@@ -59,39 +61,44 @@ namespace MenadzerRoslin
         private void RoslinyListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _selectedRoslina = RoslinyListView.SelectedItem as Roslina;
+            
+            // Aktywacja/dezaktywacja przycisków akcji
+            bool isRoslinaSelected = _selectedRoslina != null;
+            SzczegolyButton.IsEnabled = isRoslinaSelected;
+            EdytujButton.IsEnabled = isRoslinaSelected;
+        }
+
+        private void RoslinyListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
             if (_selectedRoslina != null)
             {
-                // Wyświetlenie szczegółów wybranej rośliny
-                SzczegolyPanel.Visibility = Visibility.Visible;
-                EdytujButton.IsEnabled = true;
-
-                NazwaTextBlock.Text = _selectedRoslina.Nazwa;
-                GatunekTextBlock.Text = _selectedRoslina.Gatunek.NazwaGatunku;
-                MiejsceTextBlock.Text = _selectedRoslina.Miejsce;
-                DataZakupuTextBlock.Text = _selectedRoslina.DataZakupu.ToString("dd.MM.yyyy");
-
-                WymaganiaTextBlock.Text = $"Podlewanie co {_selectedRoslina.Gatunek.WymagaNawadnianiaCoIleDni} dni\n" +
-                                         $"Nawożenie co {_selectedRoslina.Gatunek.WymagaNawozeniaCoIleDni} dni\n" +
-                                         $"Światło: {_selectedRoslina.Gatunek.Swiatlo}\n" +
-                                         $"Temperatura: {_selectedRoslina.Gatunek.TemperaturaMin}°C - {_selectedRoslina.Gatunek.TemperaturaMax}°C";
-
-                // Załadowanie historii zabiegów
-                var zabiegi = _context.Zabiegi
-                    .Where(z => z.RoslinaId == _selectedRoslina.RoslinaId)
-                    .OrderByDescending(z => z.DataWykonania)
-                    .ToList();
-                ZabiegiListView.ItemsSource = zabiegi;
+                PokazSzczegolyRosliny(_selectedRoslina);
             }
-            else
+        }
+
+        private void PokazSzczegoly_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedRoslina != null)
             {
-                SzczegolyPanel.Visibility = Visibility.Collapsed;
-                EdytujButton.IsEnabled = false;
+                PokazSzczegolyRosliny(_selectedRoslina);
+            }
+        }
+
+        private void PokazSzczegolyRosliny(Roslina roslina)
+        {
+            var szczegolyWindow = new SzczegolyRoslinyWindow(_context, roslina);
+            szczegolyWindow.Owner = this;
+            if (szczegolyWindow.ShowDialog() == true)
+            {
+                // Odświeżenie danych po edycji
+                LoadData();
             }
         }
 
         private void DodajRosline_Click(object sender, RoutedEventArgs e)
         {
             var dodajRoslineWindow = new DodajRoslineWindow(_context);
+            dodajRoslineWindow.Owner = this;
             if (dodajRoslineWindow.ShowDialog() == true)
             {
                 LoadData();
@@ -103,6 +110,7 @@ namespace MenadzerRoslin
             if (_selectedRoslina != null)
             {
                 var edytujRoslineWindow = new EdytujRoslineWindow(_context, _selectedRoslina);
+                edytujRoslineWindow.Owner = this;
                 if (edytujRoslineWindow.ShowDialog() == true)
                 {
                     LoadData();
@@ -115,15 +123,9 @@ namespace MenadzerRoslin
             if (_selectedRoslina != null)
             {
                 var dodajZabiegWindow = new DodajZabiegWindow(_context, _selectedRoslina);
+                dodajZabiegWindow.Owner = this;
                 if (dodajZabiegWindow.ShowDialog() == true)
                 {
-                    // Odświeżenie listy zabiegów
-                    var zabiegi = _context.Zabiegi
-                        .Where(z => z.RoslinaId == _selectedRoslina.RoslinaId)
-                        .OrderByDescending(z => z.DataWykonania)
-                        .ToList();
-                    ZabiegiListView.ItemsSource = zabiegi;
-
                     // Dodanie przypomnienia dla następnego zabiegu
                     if (dodajZabiegWindow.DodajPrzypomnienie && dodajZabiegWindow.Zabieg.TypZabiegu == "Podlewanie")
                     {
