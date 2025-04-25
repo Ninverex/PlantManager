@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET9_0;NETCOREAPP
 C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\App.xaml
-5-833371444
+6-1182452744
 
-18-1792356012
+19263466713
 220-910834575
-MainWindow.xaml;Views\DodajRoslineWindow.xaml;Views\DodajZabiegWindow.xaml;Views\EdytujRoslineWindow.xaml;Views\SzczegolyRoslinyWindow.xaml;
+MainWindow.xaml;Views\DodajGatunekWindow.xaml;Views\DodajRoslineWindow.xaml;Views\DodajZabiegWindow.xaml;Views\EdytujRoslineWindow.xaml;Views\SzczegolyRoslinyWindow.xaml;
 
 False
 

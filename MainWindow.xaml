@@ -244,76 +244,34 @@
 
                 <TabItem Header="Gatunki">
                     <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            
-                            <TextBlock Grid.Row="0" Text="Zdefiniowane gatunki roślin" FontSize="18" Margin="0,0,0,15"/>
-                            
-                            <!-- Lista gatunków -->
-                            <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0" Margin="0,0,15,0">
-                                <ListView x:Name="GatunkiListView" BorderThickness="0">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Nazwa gatunku" DisplayMemberBinding="{Binding NazwaGatunku}" Width="200"/>
-                                            <GridViewColumn Header="Podlewanie co (dni)" DisplayMemberBinding="{Binding WymagaNawadnianiaCoIleDni}" Width="150"/>
-                                            <GridViewColumn Header="Nawożenie co (dni)" DisplayMemberBinding="{Binding WymagaNawozeniaCoIleDni}" Width="150"/>
-                                            <GridViewColumn Header="Światło" DisplayMemberBinding="{Binding Swiatlo}" Width="100"/>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </Border>
-                        </Grid>
-
-                        <!-- Panel dodawania gatunku -->
-                        <Border Grid.Column="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0" Padding="20" Width="280">
-                            <StackPanel>
-                                <TextBlock Text="Dodaj nowy gatunek" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,20"/>
-
-                                <TextBlock Text="Nazwa gatunku:" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <TextBox x:Name="NazwaGatunkuTextBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15"/>
-                                </Border>
-
-                                <TextBlock Text="Podlewanie co (dni):" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <TextBox x:Name="PodlewanieTextBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15"/>
-                                </Border>
-
-                                <TextBlock Text="Nawożenie co (dni):" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <TextBox x:Name="NawozenieTextBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15"/>
-                                </Border>
-
-                                <TextBlock Text="Światło:" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <ComboBox x:Name="SwiatloComboBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15">
-                                        <ComboBoxItem Content="pełne"/>
-                                        <ComboBoxItem Content="półcień"/>
-                                        <ComboBoxItem Content="cień"/>
-                                    </ComboBox>
-                                </Border>
-
-                                <TextBlock Text="Temperatura min (°C):" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <TextBox x:Name="TempMinTextBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15"/>
-                                </Border>
-
-                                <TextBlock Text="Temperatura max (°C):" Margin="0,0,0,5"/>
-                                <Border BorderThickness="1" BorderBrush="#E0E0E0" CornerRadius="4">
-                                    <TextBox x:Name="TempMaxTextBox" BorderThickness="0" Padding="8,6" Margin="0,0,0,15"/>
-                                </Border>
-
-                                <Button Content="Dodaj gatunek" Click="DodajGatunek_Click" Margin="0,15,0,0"/>
-                            </StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Nagłówek sekcji -->
+                        <TextBlock Grid.Row="0" Text="Zdefiniowane gatunki roślin" FontSize="18" Margin="0,0,0,15"/>
+                        
+                        <!-- Lista gatunków -->
+                        <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0">
+                            <ListView x:Name="GatunkiListView" BorderThickness="0">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Nazwa gatunku" DisplayMemberBinding="{Binding NazwaGatunku}" Width="200"/>
+                                        <GridViewColumn Header="Podlewanie co (dni)" DisplayMemberBinding="{Binding WymagaNawadnianiaCoIleDni}" Width="150"/>
+                                        <GridViewColumn Header="Nawożenie co (dni)" DisplayMemberBinding="{Binding WymagaNawozeniaCoIleDni}" Width="150"/>
+                                        <GridViewColumn Header="Światło" DisplayMemberBinding="{Binding Swiatlo}" Width="100"/>
+                                        <GridViewColumn Header="Temp. min (°C)" DisplayMemberBinding="{Binding TemperaturaMin}" Width="100"/>
+                                        <GridViewColumn Header="Temp. max (°C)" DisplayMemberBinding="{Binding TemperaturaMax}" Width="100"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
                         </Border>
+                        
+                        <!-- Przycisk dodawania gatunku -->
+                        <Button Grid.Row="2" Content="➕ Dodaj nowy gatunek" Click="DodajGatunek_Click" 
+                                HorizontalAlignment="Right" Width="145" Height="35" Margin="0,15,0,0" Background="#4CAF50" />
                     </Grid>
                 </TabItem>
             </TabControl>

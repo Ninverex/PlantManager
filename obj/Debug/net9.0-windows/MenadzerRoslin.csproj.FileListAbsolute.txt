@@ -132,3 +132,5 @@ C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0
 C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0-windows\Views\EdytujRoslineWindow.g.cs
 C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0-windows\Views\SzczegolyRoslinyWindow.baml
 C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0-windows\Views\SzczegolyRoslinyWindow.g.cs
+C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0-windows\Views\DodajGatunekWindow.baml
+C:\Users\Maciek\Desktop\studia\c#\PlanterManager\MenadzerRoslin\obj\Debug\net9.0-windows\Views\DodajGatunekWindow.g.cs
