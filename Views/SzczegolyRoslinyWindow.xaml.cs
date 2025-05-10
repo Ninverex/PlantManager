@@ -47,52 +47,9 @@ namespace MenadzerRoslin.Views
             var dodajZabiegWindow = new DodajZabiegWindow(_context, _roslina);
             if (dodajZabiegWindow.ShowDialog() == true)
             {
-                // Odświeżenie listy zabiegów
-                LoadZabiegi();
-
-                // Dodanie przypomnienia dla następnego zabiegu
-                if (dodajZabiegWindow.DodajPrzypomnienie && dodajZabiegWindow.Zabieg.TypZabiegu == "Podlewanie")
-                {
-                    var dataNastepnegoPodlewania = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(_roslina.Gatunek.WymagaNawadnianiaCoIleDni);
-                    var przypomnienie = new Przypomnienie
-                    {
-                        RoslinaId = _roslina.RoslinaId,
-                        TypZabiegu = "Podlewanie",
-                        DataPlanowana = dataNastepnegoPodlewania,
-                        CzyWykonane = false
-                    };
-                    _context.Przypomnienia.Add(przypomnienie);
-                    _context.SaveChanges();
-                }
-                else if (dodajZabiegWindow.DodajPrzypomnienie && dodajZabiegWindow.Zabieg.TypZabiegu == "Nawożenie")
-                {
-                    var dataNastepnegoNawozenia = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(_roslina.Gatunek.WymagaNawadnianiaCoIleDni);
-                    var przypomnienie = new Przypomnienie
-                    {
-                        RoslinaId = _roslina.RoslinaId,
-                        TypZabiegu = "Nawożenie",
-                        DataPlanowana = dataNastepnegoNawozenia,
-                        CzyWykonane = false
-                    };
-                    _context.Przypomnienia.Add(przypomnienie);
-                    _context.SaveChanges();
-                }
-                else
-                {
-                    var dataNastepnegoZabiegu = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(7); // Inny typ zabiegu co 7 dni
-                    var przypomnienie = new Przypomnienie
-                    {
-                        RoslinaId = _roslina.RoslinaId,
-                        TypZabiegu = dodajZabiegWindow.Zabieg.TypZabiegu,
-                        DataPlanowana = dataNastepnegoZabiegu,
-                        CzyWykonane = false
-                    };
-                    _context.Przypomnienia.Add(przypomnienie);
-                    _context.SaveChanges();
-                }
+                LoadZabiegi(); // Odświeżenie listy zabiegów
             }
         }
-        
 
         private void EdytujRosline_Click(object sender, RoutedEventArgs e)
         {
@@ -114,7 +71,6 @@ namespace MenadzerRoslin.Views
                                          $"Światło: {_roslina.Gatunek.Swiatlo}\n" +
                                          $"Temperatura: {_roslina.Gatunek.TemperaturaMin}°C - {_roslina.Gatunek.TemperaturaMax}°C";
 
-                // Powiadomienie głównego okna o zmianach
                 DialogResult = true;
             }
         }

@@ -139,7 +139,7 @@
                 <GridView>
 
                     <!-- Data -->
-                    <GridViewColumn Width="100"
+                    <GridViewColumn Width="120"
                                     HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
@@ -154,7 +154,7 @@
                     </GridViewColumn>
 
                     <!-- Typ -->
-                    <GridViewColumn Width="120"
+                    <GridViewColumn Width="150"
                                     HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
@@ -169,7 +169,7 @@
                     </GridViewColumn>
 
                     <!-- Opis -->
-                    <GridViewColumn Width="320"
+                    <GridViewColumn Width="475"
                                     HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
                         <GridViewColumn.HeaderTemplate>
                             <DataTemplate>
