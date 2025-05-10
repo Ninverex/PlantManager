@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MenadzerRoslin"
         mc:Ignorable="d"
-        Title="Menadżer Roślin Domowych" Height="650" Width="1200"
-        WindowStartupLocation="CenterScreen">
+        Title="Menadżer Roślin Domowych" Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     
     <Window.Resources>
         <!-- Style dla przycisków -->
@@ -233,28 +234,121 @@
 
                 
 
-<TabItem Header="Wszystkie przypomnienia">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <TabItem Header="Wszystkie przypomnienia">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="Wszystkie zaplanowane zabiegi"
-                   FontSize="22"
-                   FontWeight="Bold"
-                   Foreground="#333"
-                   Margin="0,0,0,20" />
+                <TextBlock Grid.Row="0"
+                           Text="Wszystkie zaplanowane zabiegi"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#333"
+                           Margin="0,0,0,20" />
 
-        <Border Grid.Row="1"
+                <!-- Panel filtrowania -->
+                <Border Grid.Row="1"
         Background="White"
-        CornerRadius="10"
-        Padding="10"
-        BorderBrush="#DADADA"
+        CornerRadius="8"
+        Padding="25"
+        BorderBrush="#CCCCCC"
         BorderThickness="1"
-        Effect="{DynamicResource MaterialShadow}">
+        Margin="0,0,0,20"
+        SnapsToDevicePixels="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0"
+                   Text="Filtruj:"
+                   FontSize="18"
+                   FontWeight="Medium"
+                   Foreground="#222"
+                   VerticalAlignment="Center"
+                   Margin="0,0,20,0"/>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+            <TextBlock Text="Od" FontSize="12" Foreground="#777" Margin="0,0,0,5"/>
+            <DatePicker x:Name="DataOdPicker"
+                        Width="170"
+                        Background="#F9F9F9"
+                        BorderBrush="#D0D0D0"
+                        SelectedDateChanged="FiltrujPrzypomnienia"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+            <TextBlock Text="Do" FontSize="12" Foreground="#777" Margin="0,0,0,5"/>
+            <DatePicker x:Name="DataDoPicker"
+                        Width="170"
+                        Background="#F9F9F9"
+                        BorderBrush="#D0D0D0"
+                        SelectedDateChanged="FiltrujPrzypomnienia"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+            <TextBlock Text="Typ zabiegu" FontSize="12" Foreground="#777" Margin="0,0,0,5"/>
+            <ComboBox x:Name="TypZabieguComboBox"
+                      Width="170"
+                      Background="#F9F9F9"
+                      BorderBrush="#D0D0D0"
+                      SelectionChanged="FiltrujPrzypomnienia">
+                <ComboBoxItem Content="Wszystkie" IsSelected="True"/>
+                <ComboBoxItem Content="Podlewanie"/>
+                <ComboBoxItem Content="Nawożenie"/>
+                <ComboBoxItem Content="Przesadzanie"/>
+                <ComboBoxItem Content="Przycinanie"/>
+                <ComboBoxItem Content="Spryskiwanie"/>
+                <ComboBoxItem Content="Czyszczenie liści"/>
+                <ComboBoxItem Content="Inne"/>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="4" Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,10,0">
+            <TextBlock Text="Status" FontSize="12" Foreground="#777" Margin="0,0,0,5"/>
+            <ComboBox x:Name="StatusComboBox"
+                      Width="170"
+                      Background="#F9F9F9"
+                      BorderBrush="#D0D0D0"
+                      SelectionChanged="FiltrujPrzypomnienia">
+                <ComboBoxItem Content="Wszystkie" IsSelected="True"/>
+                <ComboBoxItem Content="Do wykonania"/>
+                <ComboBoxItem Content="Wykonane"/>
+            </ComboBox>
+        </StackPanel>
+
+        <Button Grid.Column="5"
+                Content="🗑 Wyczyść"
+                Click="WyczyscFiltry_Click"
+                VerticalAlignment="Bottom"
+                Height="34"
+                Width="110"
+                FontSize="13"
+                Background="#eeeeee"
+                BorderBrush="#cccccc"
+                Foreground="#444"
+                Margin="10,0,0,0"
+                Cursor="Hand"/>
+    </Grid>
+</Border>
+
+
+        <Border Grid.Row="2"
+                Background="White"
+                CornerRadius="10"
+                Padding="10"
+                BorderBrush="#DADADA"
+                BorderThickness="1"
+                Effect="{DynamicResource MaterialShadow}">
 
             <ListView x:Name="PrzypomnieniaPelneListView"
                       BorderThickness="0"
@@ -330,22 +424,22 @@
             </ListView>
         </Border>
 
-                    <Button Grid.Row="2"
-                        Content="🔄 Odśwież dane"
-                        Click="OdswiezPrzypomnienia_Click"
-                        HorizontalAlignment="Right"
-                        Width="160"
-                        Height="45"
-                        Margin="0,20,0,0"
-                        Background="#4CAF50"
-                        Foreground="White"
-                        FontSize="15"
-                        FontWeight="SemiBold"
-                        BorderBrush="#388E3C"
-                        BorderThickness="1"
-                        Padding="5" />
-                    </Grid>
-                </TabItem>
+        <Button Grid.Row="3"
+                Content="🔄 Odśwież dane"
+                Click="OdswiezPrzypomnienia_Click"
+                HorizontalAlignment="Right"
+                Width="160"
+                Height="45"
+                Margin="0,20,0,0"
+                Background="#4CAF50"
+                Foreground="White"
+                FontSize="15"
+                FontWeight="SemiBold"
+                BorderBrush="#388E3C"
+                BorderThickness="1"
+                Padding="5" />
+    </Grid>
+</TabItem>
 
                 <TabItem Header="Gatunki">
                     <Grid Margin="5">

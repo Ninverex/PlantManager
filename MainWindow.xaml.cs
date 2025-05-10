@@ -20,18 +20,46 @@ namespace MenadzerRoslin
         {
             InitializeComponent();
             _context = new ApplicationDbContext();
-            
+    
+            // Dodaj obsługę zdarzenia Loaded, aby upewnić się, że kontrolki są zainicjalizowane
+            this.Loaded += MainWindow_Loaded;
+    
             // Załadowanie danych przy starcie aplikacji
             LoadData();
         }
 
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Inicjalizacja kontrolek filtrowania
+                if (TypZabieguComboBox != null && TypZabieguComboBox.Items.Count > 0)
+                {
+                    TypZabieguComboBox.SelectedIndex = 0;
+                }
+        
+                if (StatusComboBox != null && StatusComboBox.Items.Count > 0)
+                {
+                    StatusComboBox.SelectedIndex = 0;
+                }
+        
+                // Odśwież dane po załadowaniu okna
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas inicjalizacji okna: {ex.Message}\n\nSzczegóły: {ex.StackTrace}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
         private void LoadData()
         {
             try
             {
                 // Wyczyść pamięć podręczną kontekstu
                 _context.ChangeTracker.Clear();
-        
+
                 // Załadowanie roślin
                 var rosliny = _context.Rosliny.Include(r => r.Gatunek).ToList();
                 RoslinyListView.ItemsSource = rosliny;
@@ -39,17 +67,37 @@ namespace MenadzerRoslin
                 // Załadowanie gatunków
                 var gatunki = _context.Gatunki.ToList();
                 GatunkiListView.ItemsSource = gatunki;
-                
+        
                 // Załadowanie wszystkich przypomnień
                 var wszystkiePrzypomnienia = _context.Przypomnienia
                     .Include(p => p.Roslina)
                     .OrderBy(p => p.DataPlanowana)
                     .ToList();
+        
+                // Przypisz do listy
                 PrzypomnieniaPelneListView.ItemsSource = wszystkiePrzypomnienia;
+        
+                // Sprawdź, czy kontrolki filtrów zostały już zainicjalizowane
+                if (IsLoaded && DataOdPicker != null && DataDoPicker != null && 
+                    TypZabieguComboBox != null && StatusComboBox != null)
+                {
+                    // Sprawdź, czy jakiekolwiek filtry są aktywne
+                    bool filtrDataOd = DataOdPicker.SelectedDate.HasValue;
+                    bool filtrDataDo = DataDoPicker.SelectedDate.HasValue;
+                    bool filtrTypZabiegu = TypZabieguComboBox.SelectedIndex > 0;
+                    bool filtrStatus = StatusComboBox.SelectedIndex > 0;
+            
+                    // Jeśli jakikolwiek filtr jest aktywny, zastosuj filtrowanie
+                    if (filtrDataOd || filtrDataDo || filtrTypZabiegu || filtrStatus)
+                    {
+                        FiltrujPrzypomnienia(null, null);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Błąd podczas ładowania danych: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Błąd podczas ładowania danych: {ex.Message}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -71,23 +119,137 @@ namespace MenadzerRoslin
             }
         }
         
+        private void FiltrujPrzypomnienia(object sender, EventArgs e)
+{
+    try
+    {
+        // Sprawdź, czy kontrolki są zainicjalizowane
+        if (PrzypomnieniaPelneListView == null || _context == null)
+        {
+            return; // Wyjdź z metody, jeśli kontrolki nie są gotowe
+        }
+
+        // Pobierz wszystkie przypomnienia
+        var wszystkiePrzypomnienia = _context.Przypomnienia
+            .Include(p => p.Roslina)
+            .OrderBy(p => p.DataPlanowana)
+            .ToList();
+
+        // Zastosuj filtr daty "od"
+        if (DataOdPicker != null && DataOdPicker.SelectedDate.HasValue)
+        {
+            var dataOd = DataOdPicker.SelectedDate.Value.Date;
+            wszystkiePrzypomnienia = wszystkiePrzypomnienia
+                .Where(p => p.DataPlanowana.Date >= dataOd)
+                .ToList();
+        }
+
+        // Zastosuj filtr daty "do"
+        if (DataDoPicker != null && DataDoPicker.SelectedDate.HasValue)
+        {
+            var dataDo = DataDoPicker.SelectedDate.Value.Date.AddDays(1).AddSeconds(-1); // Koniec dnia
+            wszystkiePrzypomnienia = wszystkiePrzypomnienia
+                .Where(p => p.DataPlanowana.Date <= dataDo.Date)
+                .ToList();
+        }
+
+        // Zastosuj filtr typu zabiegu
+        if (TypZabieguComboBox != null && TypZabieguComboBox.SelectedItem != null)
+        {
+            var selectedItem = TypZabieguComboBox.SelectedItem as ComboBoxItem;
+            if (selectedItem != null)
+            {
+                var typZabiegu = selectedItem.Content as string;
+                if (!string.IsNullOrEmpty(typZabiegu) && typZabiegu != "Wszystkie")
+                {
+                    wszystkiePrzypomnienia = wszystkiePrzypomnienia
+                        .Where(p => p.TypZabiegu == typZabiegu)
+                        .ToList();
+                }
+            }
+        }
+
+        // Zastosuj filtr statusu
+        if (StatusComboBox != null && StatusComboBox.SelectedItem != null)
+        {
+            var selectedItem = StatusComboBox.SelectedItem as ComboBoxItem;
+            if (selectedItem != null)
+            {
+                var status = selectedItem.Content as string;
+                if (!string.IsNullOrEmpty(status))
+                {
+                    if (status == "Do wykonania")
+                    {
+                        wszystkiePrzypomnienia = wszystkiePrzypomnienia
+                            .Where(p => p.CzyWykonane == false)
+                            .ToList();
+                    }
+                    else if (status == "Wykonane")
+                    {
+                        wszystkiePrzypomnienia = wszystkiePrzypomnienia
+                            .Where(p => p.CzyWykonane == true)
+                            .ToList();
+                    }
+                }
+            }
+        }
+
+        // Przypisz przefiltrowane dane do ListView
+        PrzypomnieniaPelneListView.ItemsSource = wszystkiePrzypomnienia;
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Błąd podczas filtrowania przypomnień: {ex.Message}\n\nSzczegóły: {ex.StackTrace}", 
+            "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+
+        private void WyczyscFiltry_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Sprawdź, czy kontrolki są zainicjalizowane
+                if (DataOdPicker == null || DataDoPicker == null || 
+                    TypZabieguComboBox == null || StatusComboBox == null || 
+                    PrzypomnieniaPelneListView == null)
+                {
+                    return; // Wyjdź z metody, jeśli kontrolki nie są gotowe
+                }
+
+                // Wyczyść filtry
+                DataOdPicker.SelectedDate = null;
+                DataDoPicker.SelectedDate = null;
+        
+                // Ustaw indeksy ComboBox na "Wszystkie"
+                TypZabieguComboBox.SelectedIndex = 0;
+                StatusComboBox.SelectedIndex = 0;
+
+                // Załaduj wszystkie przypomnienia
+                var wszystkiePrzypomnienia = _context.Przypomnienia
+                    .Include(p => p.Roslina)
+                    .OrderBy(p => p.DataPlanowana)
+                    .ToList();
+        
+                PrzypomnieniaPelneListView.ItemsSource = wszystkiePrzypomnienia;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas czyszczenia filtrów: {ex.Message}\n\nSzczegóły: {ex.StackTrace}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
         private void OdswiezPrzypomnienia_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 // Wyczyść pamięć podręczną kontekstu
                 _context.ChangeTracker.Clear();
-        
-                // Załaduj wszystkie przypomnienia na nowo
-                var wszystkiePrzypomnienia = _context.Przypomnienia
-                    .Include(p => p.Roslina)
-                    .OrderBy(p => p.DataPlanowana)
-                    .ToList();
-            
-                // Przypisz do listy
-                PrzypomnieniaPelneListView.ItemsSource = wszystkiePrzypomnienia;
                 
-                MessageBox.Show($"Dane zostały odświeżone. Znaleziono {wszystkiePrzypomnienia.Count} przypomnień.", 
+                // Zastosuj filtry ponownie
+                FiltrujPrzypomnienia(sender, e);
+                
+                MessageBox.Show("Dane zostały odświeżone.", 
                     "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -149,6 +311,8 @@ namespace MenadzerRoslin
                 MessageBox.Show("Gatunek został dodany pomyślnie.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+        
+        
 
 private void Przypomnienie_Checked(object sender, RoutedEventArgs e)
 {
@@ -254,6 +418,8 @@ private void Przypomnienie_Checked(object sender, RoutedEventArgs e)
         }
     }
 }
+
+        
         
 
 

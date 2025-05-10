@@ -105,6 +105,9 @@ namespace MenadzerRoslin.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<byte[]>("Zdjecie")
+                        .HasColumnType("bytea");
+
                     b.HasKey("RoslinaId");
 
                     b.HasIndex("GatunekId");
