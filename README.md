@@ -24,7 +24,7 @@ Menadżer Roślin to aplikacja desktopowa WPF służąca do zarządzania kolekcj
 - dodawanie rośliny:  
 ![image](https://github.com/user-attachments/assets/d5509e44-a0ef-4ab4-9a4f-88066b725b1d)  
 - szczegóły rośliny:  
-![image](https://github.com/user-attachments/assets/c034acac-da1b-4e7d-871f-9ee78de0175c)  
+![image](https://github.com/user-attachments/assets/be97de71-5171-41f1-90e1-07208e3e0ab1)  
 - dodawanie zabiegu:  
 ![image](https://github.com/user-attachments/assets/53773d31-91ac-4270-b1f4-2c25b67d1387)  
 
