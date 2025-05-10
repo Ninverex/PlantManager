@@ -135,6 +135,7 @@
                     <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Bottom">
                         <CheckBox x:Name="DodajPrzypomnienieCheckBox" 
                                 Style="{StaticResource CheckBoxStyle}"
+                                IsChecked="False"
                                 Content="Dodaj przypomnienie o następnym zabiegu"/>
                     </StackPanel>
                 </Grid>

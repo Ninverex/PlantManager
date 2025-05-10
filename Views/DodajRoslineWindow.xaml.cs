@@ -69,29 +69,7 @@ namespace MenadzerRoslin
 
                 _context.Rosliny.Add(roslina);
                 _context.SaveChanges();
-
-                // Dodanie przypomnień dla nowej rośliny
-                var gatunek = GatunekComboBox.SelectedItem as Gatunek;
                 
-                // Przypomnienie o podlewaniu
-                var przypomnieniePodlewanie = new Przypomnienie
-                {
-                    RoslinaId = roslina.RoslinaId,
-                    TypZabiegu = "Podlewanie",
-                    DataPlanowana = DateTime.Today.AddDays(gatunek.WymagaNawadnianiaCoIleDni),
-                    CzyWykonane = false
-                };
-                _context.Przypomnienia.Add(przypomnieniePodlewanie);
-
-                // Przypomnienie o nawożeniu
-                var przypomnienieNawozenie = new Przypomnienie
-                {
-                    RoslinaId = roslina.RoslinaId,
-                    TypZabiegu = "Nawożenie",
-                    DataPlanowana = DateTime.Today.AddDays(gatunek.WymagaNawozeniaCoIleDni),
-                    CzyWykonane = false
-                };
-                _context.Przypomnienia.Add(przypomnienieNawozenie);
 
                 _context.SaveChanges();
 

@@ -64,8 +64,35 @@ namespace MenadzerRoslin.Views
                     _context.Przypomnienia.Add(przypomnienie);
                     _context.SaveChanges();
                 }
+                else if (dodajZabiegWindow.DodajPrzypomnienie && dodajZabiegWindow.Zabieg.TypZabiegu == "Nawożenie")
+                {
+                    var dataNastepnegoNawozenia = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(_roslina.Gatunek.WymagaNawadnianiaCoIleDni);
+                    var przypomnienie = new Przypomnienie
+                    {
+                        RoslinaId = _roslina.RoslinaId,
+                        TypZabiegu = "Nawożenie",
+                        DataPlanowana = dataNastepnegoNawozenia,
+                        CzyWykonane = false
+                    };
+                    _context.Przypomnienia.Add(przypomnienie);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    var dataNastepnegoZabiegu = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(7); // Inny typ zabiegu co 7 dni
+                    var przypomnienie = new Przypomnienie
+                    {
+                        RoslinaId = _roslina.RoslinaId,
+                        TypZabiegu = dodajZabiegWindow.Zabieg.TypZabiegu,
+                        DataPlanowana = dataNastepnegoZabiegu,
+                        CzyWykonane = false
+                    };
+                    _context.Przypomnienia.Add(przypomnienie);
+                    _context.SaveChanges();
+                }
             }
         }
+        
 
         private void EdytujRosline_Click(object sender, RoutedEventArgs e)
         {

@@ -4,12 +4,14 @@ using System.Windows.Controls;
 using MenadzerRoslin.Data;
 using MenadzerRoslin.Models;
 
+
 namespace MenadzerRoslin
 {
     public partial class DodajZabiegWindow : Window
     {
         private readonly ApplicationDbContext _context;
         private readonly Roslina _roslina;
+        
 
         public Zabieg Zabieg { get; private set; }
         public bool DodajPrzypomnienie => DodajPrzypomnienieCheckBox.IsChecked ?? false;
@@ -59,6 +61,7 @@ namespace MenadzerRoslin
 
                 _context.Zabiegi.Add(Zabieg);
                 _context.SaveChanges();
+               
 
                 DialogResult = true;
             }

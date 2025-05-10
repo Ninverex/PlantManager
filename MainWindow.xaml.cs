@@ -29,22 +29,17 @@ namespace MenadzerRoslin
         {
             try
             {
+                // Wyczyść pamięć podręczną kontekstu
+                _context.ChangeTracker.Clear();
+        
                 // Załadowanie roślin
-                _context.Rosliny.Include(r => r.Gatunek).Load();
-                RoslinyListView.ItemsSource = _context.Rosliny.Local.ToObservableCollection();
+                var rosliny = _context.Rosliny.Include(r => r.Gatunek).ToList();
+                RoslinyListView.ItemsSource = rosliny;
 
                 // Załadowanie gatunków
-                _context.Gatunki.Load();
-                GatunkiListView.ItemsSource = _context.Gatunki.Local.ToObservableCollection();
-
-                // Załadowanie przypomnień na dziś
-                var dzisiaj = DateTime.Today;
-                var przypomnieniaDzis = _context.Przypomnienia
-                    .Include(p => p.Roslina)
-                    .Where(p => p.DataPlanowana.Date <= dzisiaj && !p.CzyWykonane)
-                    .ToList();
-                PrzypomnieniaDzisListView.ItemsSource = przypomnieniaDzis;
-
+                var gatunki = _context.Gatunki.ToList();
+                GatunkiListView.ItemsSource = gatunki;
+                
                 // Załadowanie wszystkich przypomnień
                 var wszystkiePrzypomnienia = _context.Przypomnienia
                     .Include(p => p.Roslina)
@@ -73,6 +68,32 @@ namespace MenadzerRoslin
             if (_selectedRoslina != null)
             {
                 PokazSzczegolyRosliny(_selectedRoslina);
+            }
+        }
+        
+        private void OdswiezPrzypomnienia_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Wyczyść pamięć podręczną kontekstu
+                _context.ChangeTracker.Clear();
+        
+                // Załaduj wszystkie przypomnienia na nowo
+                var wszystkiePrzypomnienia = _context.Przypomnienia
+                    .Include(p => p.Roslina)
+                    .OrderBy(p => p.DataPlanowana)
+                    .ToList();
+            
+                // Przypisz do listy
+                PrzypomnieniaPelneListView.ItemsSource = wszystkiePrzypomnienia;
+                
+                MessageBox.Show($"Dane zostały odświeżone. Znaleziono {wszystkiePrzypomnienia.Count} przypomnień.", 
+                    "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd podczas odświeżania danych: {ex.Message}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -117,34 +138,6 @@ namespace MenadzerRoslin
                 }
             }
         }
-
-        private void DodajZabieg_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedRoslina != null)
-            {
-                var dodajZabiegWindow = new DodajZabiegWindow(_context, _selectedRoslina);
-                dodajZabiegWindow.Owner = this;
-                if (dodajZabiegWindow.ShowDialog() == true)
-                {
-                    // Dodanie przypomnienia dla następnego zabiegu
-                    if (dodajZabiegWindow.DodajPrzypomnienie && dodajZabiegWindow.Zabieg.TypZabiegu == "Podlewanie")
-                    {
-                        var dataNastepnegoPodlewania = dodajZabiegWindow.Zabieg.DataWykonania.AddDays(_selectedRoslina.Gatunek.WymagaNawadnianiaCoIleDni);
-                        var przypomnienie = new Przypomnienie
-                        {
-                            RoslinaId = _selectedRoslina.RoslinaId,
-                            TypZabiegu = "Podlewanie",
-                            DataPlanowana = dataNastepnegoPodlewania,
-                            CzyWykonane = false
-                        };
-                        _context.Przypomnienia.Add(przypomnienie);
-                        _context.SaveChanges();
-                        LoadData();
-                    }
-                }
-            }
-        }
-
         private void DodajGatunek_Click(object sender, RoutedEventArgs e)
         {
             var dodajGatunekWindow = new DodajGatunekWindow(_context);
@@ -157,68 +150,112 @@ namespace MenadzerRoslin
             }
         }
 
-        private void Przypomnienie_Checked(object sender, RoutedEventArgs e)
+private void Przypomnienie_Checked(object sender, RoutedEventArgs e)
+{
+    var checkBox = sender as CheckBox;
+    var przypomnienie = checkBox.DataContext as Przypomnienie;
+
+    if (przypomnienie != null && (checkBox.IsChecked ?? false))
+    {
+        try
         {
-            var checkBox = sender as CheckBox;
-            var przypomnienie = checkBox.DataContext as Przypomnienie;
-
-            if (przypomnienie != null)
+            // Pobierz dane z przypomnienia
+            int przypomnienieId = przypomnienie.PrzypomnienieId;
+            int roslinaId = przypomnienie.RoslinaId;
+            string typZabiegu = przypomnienie.TypZabiegu;
+            DateTime dataPlanowana = przypomnienie.DataPlanowana;
+            
+            // Utwórz nowy kontekst, aby uniknąć problemów z śledzeniem zmian
+            using (var newContext = new ApplicationDbContext())
             {
-                // Aktualizacja statusu przypomnienia
-                przypomnienie.CzyWykonane = checkBox.IsChecked ?? false;
-                _context.SaveChanges();
-
-                // Jeśli przypomnienie zostało oznaczone jako wykonane, dodaj nowy zabieg
-                if (przypomnienie.CzyWykonane)
+                // Pobierz przypomnienie z nowego kontekstu
+                var przypomnienieDb = newContext.Przypomnienia
+                    .FirstOrDefault(p => p.PrzypomnienieId == przypomnienieId);
+                    
+                if (przypomnienieDb == null)
                 {
-                    var zabieg = new Zabieg
-                    {
-                        RoslinaId = przypomnienie.RoslinaId,
-                        TypZabiegu = przypomnienie.TypZabiegu,
-                        DataWykonania = DateTime.Now,
-                        Opis = "Wykonano z przypomnienia"
-                    };
-                    _context.Zabiegi.Add(zabieg);
-
-                    // Dodaj nowe przypomnienie na przyszłość
-                    if (przypomnienie.TypZabiegu == "Podlewanie")
-                    {
-                        var roslina = _context.Rosliny.Include(r => r.Gatunek).FirstOrDefault(r => r.RoslinaId == przypomnienie.RoslinaId);
-                        if (roslina != null)
-                        {
-                            var dataNastepnegoPodlewania = DateTime.Now.AddDays(roslina.Gatunek.WymagaNawadnianiaCoIleDni);
-                            var nowePrzypomnienie = new Przypomnienie
-                            {
-                                RoslinaId = przypomnienie.RoslinaId,
-                                TypZabiegu = "Podlewanie",
-                                DataPlanowana = dataNastepnegoPodlewania,
-                                CzyWykonane = false
-                            };
-                            _context.Przypomnienia.Add(nowePrzypomnienie);
-                        }
-                    }
-                    else if (przypomnienie.TypZabiegu == "Nawożenie")
-                    {
-                        var roslina = _context.Rosliny.Include(r => r.Gatunek).FirstOrDefault(r => r.RoslinaId == przypomnienie.RoslinaId);
-                        if (roslina != null)
-                        {
-                            var dataNastepnegoNawozenia = DateTime.Now.AddDays(roslina.Gatunek.WymagaNawozeniaCoIleDni);
-                            var nowePrzypomnienie = new Przypomnienie
-                            {
-                                RoslinaId = przypomnienie.RoslinaId,
-                                TypZabiegu = "Nawożenie",
-                                DataPlanowana = dataNastepnegoNawozenia,
-                                CzyWykonane = false
-                            };
-                            _context.Przypomnienia.Add(nowePrzypomnienie);
-                        }
-                    }
-
-                    _context.SaveChanges();
-                    LoadData();
+                    MessageBox.Show("Nie można znaleźć przypomnienia w bazie danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    checkBox.IsChecked = false;
+                    return;
                 }
+                
+                // Pobierz roślinę z gatunkiem
+                var roslina = newContext.Rosliny
+                    .Include(r => r.Gatunek)
+                    .FirstOrDefault(r => r.RoslinaId == roslinaId);
+
+                if (roslina == null)
+                {
+                    MessageBox.Show("Nie można znaleźć rośliny dla tego przypomnienia.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    checkBox.IsChecked = false;
+                    return;
+                }
+                
+                // Oblicz datę następnego zabiegu
+                DateTime dataNastepnegoZabiegu;
+                if (typZabiegu == "Podlewanie")
+                {
+                    dataNastepnegoZabiegu = DateTime.SpecifyKind(
+                        dataPlanowana.Date.AddDays(roslina.Gatunek.WymagaNawadnianiaCoIleDni), 
+                        DateTimeKind.Unspecified);
+                }
+                else if (typZabiegu == "Nawożenie")
+                {
+                    dataNastepnegoZabiegu = DateTime.SpecifyKind(
+                        dataPlanowana.Date.AddDays(roslina.Gatunek.WymagaNawozeniaCoIleDni), 
+                        DateTimeKind.Unspecified);
+                }
+                else
+                {
+                    dataNastepnegoZabiegu = DateTime.SpecifyKind(
+                        dataPlanowana.Date.AddDays(7), 
+                        DateTimeKind.Unspecified);
+                }
+                
+                // Oznacz przypomnienie jako wykonane
+                przypomnienieDb.CzyWykonane = true;
+                newContext.SaveChanges();
+                
+                // Dodaj nowy zabieg
+                newContext.Zabiegi.Add(new Zabieg
+                {
+                    RoslinaId = roslinaId,
+                    TypZabiegu = typZabiegu,
+                    DataWykonania = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified),
+                    Opis = $"Wykonano z przypomnienia z dnia {dataPlanowana.ToString("dd.MM.yyyy")}"
+                });
+                newContext.SaveChanges();
+                
+                // Dodaj nowe przypomnienie
+                newContext.Przypomnienia.Add(new Przypomnienie
+                {
+                    RoslinaId = roslinaId,
+                    TypZabiegu = typZabiegu,
+                    DataPlanowana = dataNastepnegoZabiegu,
+                    CzyWykonane = false
+                });
+                newContext.SaveChanges();
+                
+                MessageBox.Show($"Dodano nowe przypomnienie o {typZabiegu.ToLower()} na dzień {dataNastepnegoZabiegu.ToString("dd.MM.yyyy")}.", 
+                               "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            
+            // Odśwież dane w głównym kontekście
+            _context.ChangeTracker.Clear();
+            LoadData();
         }
+        catch (Exception ex)
+        {
+            // Przywróć stan checkboxa
+            checkBox.IsChecked = false;
+            
+            MessageBox.Show($"Błąd podczas aktualizacji przypomnienia: {ex.Message}\n\nSzczegóły: {ex.InnerException?.Message}", 
+                           "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+}
+        
+
 
         protected override void OnClosed(EventArgs e)
         {

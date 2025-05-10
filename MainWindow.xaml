@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MenadzerRoslin"
         mc:Ignorable="d"
-        Title="Menadżer Roślin Domowych" Height="650" Width="1000"
+        Title="Menadżer Roślin Domowych" Height="650" Width="1200"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
@@ -116,31 +116,104 @@
         <Border Grid.Row="1" Background="#F9FFF9" Padding="15">
             <TabControl>
                 <TabItem Header="Moje Rośliny">
-                    <Grid Margin="5">
+                    <Grid Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        
+
                         <!-- Nagłówek sekcji -->
-                        <TextBlock Grid.Row="0" Text="Kolekcja Twoich roślin" FontSize="18" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0"
+                                   Text="Kolekcja Twoich roślin"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="#333"
+                                   Margin="0,0,0,20"/>
 
                         <!-- Lista roślin -->
-                        <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0">
-                            <ListView x:Name="RoslinyListView" Margin="0" BorderThickness="0"
-                                      MouseDoubleClick="RoslinyListView_MouseDoubleClick"
-                                      SelectionChanged="RoslinyListView_SelectionChanged">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Nazwa" DisplayMemberBinding="{Binding Nazwa}" Width="200"/>
-                                        <GridViewColumn Header="Gatunek" DisplayMemberBinding="{Binding Gatunek.NazwaGatunku}" Width="200"/>
-                                        <GridViewColumn Header="Miejsce" DisplayMemberBinding="{Binding Miejsce}" Width="150"/>
-                                        <GridViewColumn Header="Data zakupu" DisplayMemberBinding="{Binding DataZakupu, StringFormat=\{0:dd.MM.yyyy\}}" Width="120"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Border>
+                        <Border Grid.Row="1"
+                            Background="White"
+                            CornerRadius="10"
+                            Padding="10"
+                            BorderBrush="#DADADA"
+                            BorderThickness="1"
+                            Effect="{DynamicResource MaterialShadow}">
+
+                        <ListView x:Name="RoslinyListView"
+                                  Margin="0"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  MouseDoubleClick="RoslinyListView_MouseDoubleClick"
+                                  SelectionChanged="RoslinyListView_SelectionChanged"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False">
+
+                            <ListView.View>
+                                <GridView>
+
+                                    <GridViewColumn Width="220"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🌱 Nazwa" FontSize="16" FontWeight="Bold" Foreground="#2E7D32"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Nazwa}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="200"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🔬 Gatunek" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Gatunek.NazwaGatunku}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="150"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🏡 Miejsce" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Miejsce}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="140"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🛒 Data zakupu" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DataZakupu, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
+
 
                         <!-- Przyciski akcji -->
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
@@ -158,87 +231,119 @@
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Do zrobienia dzisiaj">
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                
 
-                        <TextBlock Grid.Row="0" Text="Zaplanowane zabiegi na dziś" FontSize="18" Margin="0,0,0,15"/>
+<TabItem Header="Wszystkie przypomnienia">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-                        <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0">
-                            <ListView Grid.Row="1" x:Name="PrzypomnieniaDzisListView" BorderThickness="0">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Roślina" DisplayMemberBinding="{Binding Roslina.Nazwa}" Width="200"/>
-                                        <GridViewColumn Header="Zabieg" DisplayMemberBinding="{Binding TypZabiegu}" Width="150"/>
-                                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataPlanowana, StringFormat=\{0:dd.MM.yyyy\}}" Width="120"/>
-                                        <GridViewColumn Header="Status" Width="100">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding CzyWykonane}" Click="Przypomnienie_Checked"/>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Border>
-                    </Grid>
-                </TabItem>
+        <TextBlock Grid.Row="0"
+                   Text="Wszystkie zaplanowane zabiegi"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="#333"
+                   Margin="0,0,0,20" />
 
-                <TabItem Header="Wszystkie przypomnienia">
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+        <Border Grid.Row="1"
+        Background="White"
+        CornerRadius="10"
+        Padding="10"
+        BorderBrush="#DADADA"
+        BorderThickness="1"
+        Effect="{DynamicResource MaterialShadow}">
 
-                        <TextBlock Grid.Row="0" Text="Wszystkie zaplanowane zabiegi" FontSize="18" Margin="0,0,0,15"/>
+            <ListView x:Name="PrzypomnieniaPelneListView"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.CanContentScroll="False">
 
-                        <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0">
-                            <ListView Grid.Row="1" x:Name="PrzypomnieniaPelneListView" BorderThickness="0">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Roślina" DisplayMemberBinding="{Binding Roslina.Nazwa}" Width="200"/>
-                                        <GridViewColumn Header="Zabieg" DisplayMemberBinding="{Binding TypZabiegu}" Width="150"/>
-                                        <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataPlanowana, StringFormat=\{0:dd.MM.yyyy\}}" Width="120"/>
-                                        <GridViewColumn Header="Status" Width="100">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding CzyWykonane}" Click="Przypomnienie_Checked">
-                                                        <CheckBox.Template>
-                                                            <ControlTemplate TargetType="{x:Type CheckBox}">
-                                                                <Border x:Name="checkBoxBorder" 
-                                                                        BorderBrush="#CCCCCC" 
-                                                                        BorderThickness="1"
-                                                                        Background="White"
-                                                                        Width="20" Height="20" 
-                                                                        CornerRadius="3">
-                                                                    <Path x:Name="checkMark" 
-                                                                          Stroke="#4CAF50" 
-                                                                          StrokeThickness="2"
-                                                                          Data="M 4,10 L 8,15 L 16,5" 
-                                                                          Visibility="Hidden"/>
-                                                                </Border>
-                                                                <ControlTemplate.Triggers>
-                                                                    <Trigger Property="IsChecked" Value="true">
-                                                                        <Setter TargetName="checkMark" Property="Visibility" Value="Visible"/>
-                                                                        <Setter TargetName="checkBoxBorder" Property="BorderBrush" Value="#4CAF50"/>
-                                                                        <Setter TargetName="checkBoxBorder" Property="Background" Value="#E6F4E6"/>
-                                                                    </Trigger>
-                                                                </ControlTemplate.Triggers>
-                                                            </ControlTemplate>
-                                                        </CheckBox.Template>
-                                                    </CheckBox>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Border>
+                <ListView.View>
+                    <GridView>
+
+                        <GridViewColumn Width="220"
+                                        HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="🌿 Roślina" FontSize="16" FontWeight="Bold" Foreground="#2E7D32"/>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Roslina.Nazwa}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="180"
+                                        HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="🔧 Zabieg" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="140"
+                                        HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="📅 Data" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DataPlanowana, StringFormat={}{0:dd.MM.yyyy}}"
+                                               FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="100"
+                                        HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="✔️ Status" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding CzyWykonane}"
+                                              Click="Przypomnienie_Checked"
+                                              HorizontalAlignment="Left"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Border>
+
+                    <Button Grid.Row="2"
+                        Content="🔄 Odśwież dane"
+                        Click="OdswiezPrzypomnienia_Click"
+                        HorizontalAlignment="Right"
+                        Width="160"
+                        Height="45"
+                        Margin="0,20,0,0"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        BorderBrush="#388E3C"
+                        BorderThickness="1"
+                        Padding="5" />
                     </Grid>
                 </TabItem>
 
@@ -251,23 +356,119 @@
                         </Grid.RowDefinitions>
                         
                         <!-- Nagłówek sekcji -->
-                        <TextBlock Grid.Row="0" Text="Zdefiniowane gatunki roślin" FontSize="18" Margin="0,0,0,15"/>
+                        <TextBlock Grid.Row="0"
+                                   Text="Zdefiniowane gatunki roślin"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="#333"
+                                   Margin="0,0,0,20"/>
+
                         
                         <!-- Lista gatunków -->
-                        <Border Grid.Row="1" Background="White" CornerRadius="5" BorderThickness="1" BorderBrush="#E0E0E0">
-                            <ListView x:Name="GatunkiListView" BorderThickness="0">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Nazwa gatunku" DisplayMemberBinding="{Binding NazwaGatunku}" Width="200"/>
-                                        <GridViewColumn Header="Podlewanie co (dni)" DisplayMemberBinding="{Binding WymagaNawadnianiaCoIleDni}" Width="150"/>
-                                        <GridViewColumn Header="Nawożenie co (dni)" DisplayMemberBinding="{Binding WymagaNawozeniaCoIleDni}" Width="150"/>
-                                        <GridViewColumn Header="Światło" DisplayMemberBinding="{Binding Swiatlo}" Width="100"/>
-                                        <GridViewColumn Header="Temp. min (°C)" DisplayMemberBinding="{Binding TemperaturaMin}" Width="100"/>
-                                        <GridViewColumn Header="Temp. max (°C)" DisplayMemberBinding="{Binding TemperaturaMax}" Width="100"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </Border>
+                                            <Border Grid.Row="1"
+                            Background="White"
+                            CornerRadius="10"
+                            Padding="10"
+                            BorderBrush="#DADADA"
+                            BorderThickness="1"
+                            Effect="{DynamicResource MaterialShadow}">
+                        
+                        <ListView x:Name="GatunkiListView"
+                                  BorderThickness="0"
+                                  Background="Transparent"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.CanContentScroll="False">
+                            
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Width="180"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🌿 Nazwa gatunku" FontSize="16" FontWeight="Bold" Foreground="#2E7D32" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding NazwaGatunku}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="190"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="💧 Podlewanie co (dni)" FontSize="16" FontWeight="Bold" Foreground="#000000" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding WymagaNawadnianiaCoIleDni}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="190"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🌱 Nawożenie co (dni)" FontSize="16" FontWeight="Bold" Foreground="#000000" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding WymagaNawozeniaCoIleDni}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="120"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="☀️ Światło" FontSize="16" FontWeight="Bold" Foreground="#000000" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Swiatlo}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="155"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="❄️ Temp. min (°C)" FontSize="16" FontWeight="Bold" Foreground="#000000" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding TemperaturaMin}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="155"
+                                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                        <GridViewColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="🔥 Temp. max (°C)" FontSize="16" FontWeight="Bold" Foreground="#000000" />
+                                            </DataTemplate>
+                                        </GridViewColumn.HeaderTemplate>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding TemperaturaMax}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Border>
                         
                         <!-- Przycisk dodawania gatunku -->
                         <Button Grid.Row="2" Content="➕ Dodaj nowy gatunek" Click="DodajGatunek_Click" 

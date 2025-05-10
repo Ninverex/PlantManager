@@ -67,7 +67,7 @@ namespace MenadzerRoslin.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("DataPlanowana")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RoslinaId")
                         .HasColumnType("integer");
@@ -92,7 +92,7 @@ namespace MenadzerRoslin.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoslinaId"));
 
                     b.Property<DateTime>("DataZakupu")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("GatunekId")
                         .HasColumnType("integer");
@@ -121,7 +121,7 @@ namespace MenadzerRoslin.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ZabiegId"));
 
                     b.Property<DateTime>("DataWykonania")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Opis")
                         .IsRequired()
