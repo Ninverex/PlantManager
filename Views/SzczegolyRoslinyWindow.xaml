@@ -9,6 +9,7 @@
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Light"/>
             <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
         </Style>
         <Style TargetType="GroupBox">
             <Setter Property="BorderBrush" Value="#66AA69"/>
@@ -42,7 +43,7 @@
                                 <Setter Property="Background" Value="#66BB6A"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#388E3C"/>
+                                <Setter Property="Background" Value="#FFFFFF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -72,7 +73,7 @@
             <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#E8F5E9" Padding="0,0,0,15" Margin="0,0,0,15">
                 <StackPanel>
                     <TextBlock x:Name="NazwaTextBlock" Text="Nazwa rośliny" Style="{StaticResource HeaderTextStyle}" 
-                           FontSize="28" FontWeight="Light" Foreground="#1B5E20"/>
+                           FontSize="28" Foreground="#1B5E20"/>
                     <TextBlock x:Name="GatunekTextBlock" Text="Gatunek" Style="{StaticResource HeaderTextStyle}" 
                            FontSize="16" Foreground="#66BB6A"/>
                 </StackPanel>
@@ -103,18 +104,18 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Miejsce: " FontWeight="SemiBold" Margin="0,5"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="MiejsceTextBlock" Text="Salon" Margin="5,5,0,5"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Miejsce: " FontWeight="SemiBold" FontSize="17" Margin="0,5"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="MiejsceTextBlock" Text="Salon" FontSize="17" Margin="5,5,0,5"/>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Data zakupu: " FontWeight="SemiBold" Margin="0,5"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DataZakupuTextBlock" Text="01.01.2023" Margin="5,5,0,5"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Data zakupu: " FontWeight="SemiBold" FontSize="17" Margin="0,5"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DataZakupuTextBlock" Text="01.01.2023"  FontSize="17" Margin="5,5,0,5"/>
                         </Grid>
                     </StackPanel>
                 </GroupBox>
 
                 <!-- Wymagania -->
                 <GroupBox Grid.Column="1" Grid.Row="0" Header="Wymagania pielęgnacyjne" Margin="0,0,0,15">
-                    <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" Margin="5" LineHeight="20"/>
+                    <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" FontSize="17" Margin="5,5,0,5" LineHeight="20"/>
                 </GroupBox>
 
                 <!-- Historia zabiegów -->
@@ -125,22 +126,75 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ListView Grid.Row="0" x:Name="ZabiegiListView" Margin="0,0,0,15" BorderThickness="1" BorderBrush="#E8F5E9">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Data" DisplayMemberBinding="{Binding DataWykonania, StringFormat=\{0:dd.MM.yyyy\}}" Width="100"/>
-                                    <GridViewColumn Header="Typ" DisplayMemberBinding="{Binding TypZabiegu}" Width="120"/>
-                                    <GridViewColumn Header="Opis" DisplayMemberBinding="{Binding Opis}" Width="320"/>
-                                </GridView>
-                            </ListView.View>
-                            <ListView.Resources>
+                       <ListView Grid.Row="0" 
+                          x:Name="ZabiegiListView" 
+                          Margin="0,0,0,15" 
+                          BorderThickness="1" 
+                          BorderBrush="#E8F5E9"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.CanContentScroll="False">
+
+                        <ListView.View>
+                <GridView>
+
+                    <!-- Data -->
+                    <GridViewColumn Width="100"
+                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="📅 Data" FontSize="16" FontWeight="Bold" Foreground="#0277BD"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DataWykonania, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#0277BD" Margin="5,2"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Typ -->
+                    <GridViewColumn Width="120"
+                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="🔧 Typ" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!-- Opis -->
+                    <GridViewColumn Width="320"
+                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                        <GridViewColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="📝 Opis" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                            </DataTemplate>
+                        </GridViewColumn.HeaderTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Opis}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+
+                           
+                           <ListView.Resources>
                                 <Style TargetType="GridViewColumnHeader">
                                     <Setter Property="Background" Value="#E8F5E9"/>
                                     <Setter Property="Padding" Value="10,5"/>
                                     <Setter Property="FontWeight" Value="SemiBold"/>
                                 </Style>
-                            </ListView.Resources>
-                        </ListView>
+                           </ListView.Resources>
+                </ListView>
 
                         <Button Grid.Row="1" Content="💧 Dodaj zabieg" Click="DodajZabieg_Click" HorizontalAlignment="Right" Height="35" Width="100" Background="#9C27B0"/>
                     </Grid>
