@@ -225,6 +225,10 @@
                             <Button Content="✏️ Edytuj" Click="EdytujRosline_Click" Width="110" Margin="0,0,10,0" 
                                     x:Name="EdytujButton" IsEnabled="False"
                                     Background="#FFA726"/> <!-- Pomarańczowy -->
+                            
+                            <Button Content="🗑️ Usuń" Click="UsunRosline_Click" Width="110" Margin="0,0,10,0" 
+                                    x:Name="UsunButton" IsEnabled="False"
+                                    Background="#F44336"/> <!-- Czerwony -->
 
                             <Button Content="➕ Dodaj roślinę" Click="DodajRosline_Click" Width="130" Height="35"
                                     Background="#4CAF50"/> <!-- Zielony -->

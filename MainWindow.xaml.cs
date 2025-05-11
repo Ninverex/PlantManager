@@ -109,6 +109,7 @@ namespace MenadzerRoslin
             bool isRoslinaSelected = _selectedRoslina != null;
             SzczegolyButton.IsEnabled = isRoslinaSelected;
             EdytujButton.IsEnabled = isRoslinaSelected;
+            UsunButton.IsEnabled = isRoslinaSelected;
         }
 
         private void RoslinyListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -204,6 +205,67 @@ namespace MenadzerRoslin
     }
 }
 
+        
+        private void UsunRosline_Click(object sender, RoutedEventArgs e)
+{
+    if (_selectedRoslina == null)
+    {
+        return;
+    }
+
+    // Potwierdzenie usunięcia
+    var result = MessageBox.Show(
+        $"Czy na pewno chcesz usunąć roślinę '{_selectedRoslina.Nazwa}'?\n\n" +
+        "Spowoduje to również usunięcie wszystkich przypomnień i zabiegów związanych z tą rośliną.",
+        "Potwierdzenie usunięcia",
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Warning);
+
+    if (result == MessageBoxResult.Yes)
+    {
+        try
+        {
+            // Pobierz roślinę z kontekstu
+            var roslina = _context.Rosliny
+                .Include(r => r.Przypomnienia)
+                .Include(r => r.Zabiegi)
+                .FirstOrDefault(r => r.RoslinaId == _selectedRoslina.RoslinaId);
+
+            if (roslina == null)
+            {
+                MessageBox.Show("Nie można znaleźć rośliny w bazie danych.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Usuń wszystkie przypomnienia związane z rośliną
+            if (roslina.Przypomnienia != null && roslina.Przypomnienia.Any())
+            {
+                _context.Przypomnienia.RemoveRange(roslina.Przypomnienia);
+            }
+
+            // Usuń wszystkie zabiegi związane z rośliną
+            if (roslina.Zabiegi != null && roslina.Zabiegi.Any())
+            {
+                _context.Zabiegi.RemoveRange(roslina.Zabiegi);
+            }
+
+            // Usuń roślinę
+            _context.Rosliny.Remove(roslina);
+            _context.SaveChanges();
+
+            // Odśwież dane
+            LoadData();
+
+            MessageBox.Show($"Roślina '{roslina.Nazwa}' została usunięta.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Błąd podczas usuwania rośliny: {ex.Message}\n\nSzczegóły: {ex.InnerException?.Message}",
+                "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+}
+        
         private void WyczyscFiltry_Click(object sender, RoutedEventArgs e)
         {
             try
