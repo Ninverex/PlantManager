@@ -1,34 +1,21 @@
 ﻿<Window x:Class="MenadzerRoslin.Views.SzczegolyRoslinyWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Szczegóły rośliny" Height="750" Width="850"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MenadzerRoslin.Views"
+        mc:Ignorable="d"
+        Title="Szczegóły rośliny" Height="800" Width="1100"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
-        Background="#F9FBF9">
+        ResizeMode="NoResize">
     <Window.Resources>
-        <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Segoe UI Light"/>
-            <Setter Property="Margin" Value="0,0,0,5"/>
-            <Setter Property="FontWeight" Value="Bold"></Setter>
-        </Style>
-        <Style TargetType="GroupBox">
-            <Setter Property="BorderBrush" Value="#66AA69"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="0,0,0,15"/>
-            <Setter Property="HeaderTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontWeight="SemiBold" FontSize="14" Foreground="#2E7D32" Margin="5,0"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <!-- Style dla przycisków -->
         <Style TargetType="Button">
-            <Setter Property="Background" Value="#4CAF50"/>
-            <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -40,172 +27,163 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#66BB6A"/>
+                                <Setter Property="Opacity" Value="0.9"/>
                             </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#FFFFFF"/>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                                <Setter Property="Foreground" Value="#888888"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="ListView">
-            <Setter Property="BorderBrush" Value="#DCEDC8"/>
+        
+        <!-- Style dla GroupBox -->
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="#DADADA"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontWeight="Bold" FontSize="14" Foreground="#2E7D32"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
     
-    <Border Background="White" CornerRadius="8" Margin="10" Padding="0">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="15" ShadowDepth="1" Opacity="0.2" Color="#000000"/>
-        </Border.Effect>
-        
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <!-- Nagłówek -->
-            <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#E8F5E9" Padding="0,0,0,15" Margin="0,0,0,15">
-                <StackPanel>
-                    <TextBlock x:Name="NazwaTextBlock" Text="Nazwa rośliny" Style="{StaticResource HeaderTextStyle}" 
-                           FontSize="28" Foreground="#1B5E20"/>
-                    <TextBlock x:Name="GatunekTextBlock" Text="Gatunek" Style="{StaticResource HeaderTextStyle}" 
-                           FontSize="16" Foreground="#66BB6A"/>
-                </StackPanel>
-            </Border>
+        <!-- Nagłówek -->
+        <TextBlock Grid.Row="0" x:Name="NazwaTextBlock" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="#2E7D32"/>
 
-            <!-- Zawartość -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+        <!-- Zawartość -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <!-- Informacje podstawowe -->
-                <GroupBox Grid.Column="0" Grid.Row="0" Header="Informacje podstawowe" Margin="0,0,10,15">
-                    <StackPanel Margin="5">
-                        <Grid>
+            <!-- Lewa kolumna - informacje o roślinie -->
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <GroupBox Header="Informacje podstawowe" Padding="10" Margin="0,0,0,15">
+                    <StackPanel>
+                        <Grid Margin="0,5">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Text="Gatunek:" FontWeight="SemiBold" FontSize="15"/>
+                            <TextBlock Grid.Column="1" x:Name="GatunekTextBlock" FontSize="15"/>
+                        </Grid>
 
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Miejsce: " FontWeight="SemiBold" FontSize="17" Margin="0,5"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="MiejsceTextBlock" Text="Salon" FontSize="17" Margin="5,5,0,5"/>
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Miejsce:" FontWeight="SemiBold" FontSize="15"/>
+                            <TextBlock Grid.Column="1" x:Name="MiejsceTextBlock" FontSize="15"/>
+                        </Grid>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Data zakupu: " FontWeight="SemiBold" FontSize="17" Margin="0,5"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DataZakupuTextBlock" Text="01.01.2023"  FontSize="17" Margin="5,5,0,5"/>
+                        <Grid Margin="0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Data zakupu:" FontWeight="SemiBold" FontSize="15"/>
+                            <TextBlock Grid.Column="1" x:Name="DataZakupuTextBlock" FontSize="15"/>
                         </Grid>
                     </StackPanel>
                 </GroupBox>
 
-                <!-- Wymagania -->
-                <GroupBox Grid.Column="1" Grid.Row="0" Header="Wymagania pielęgnacyjne" Margin="0,0,0,15">
-                    <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" FontSize="17" Margin="5,5,0,5" LineHeight="20"/>
+                <GroupBox Header="Wymagania pielęgnacyjne" Padding="10" Margin="0,0,0,15">
+                    <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" FontSize="15"/>
                 </GroupBox>
 
-                <!-- Historia zabiegów -->
-                <GroupBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="Historia zabiegów">
-                    <Grid Margin="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                <!-- Zdjęcie rośliny -->
+                <GroupBox Header="Zdjęcie rośliny" Padding="10" Margin="0,0,0,15">
+                    <Border BorderBrush="#CCCCCC" BorderThickness="1" Height="275">
+                        <Image x:Name="ZdjecieImage" Stretch="Uniform" Margin="5"/>
+                    </Border>
+                </GroupBox>
+            </StackPanel>
 
-                       <ListView Grid.Row="0" 
-                          x:Name="ZabiegiListView" 
-                          Margin="0,0,0,15" 
-                          BorderThickness="1" 
-                          BorderBrush="#E8F5E9"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.CanContentScroll="False">
+            <!-- Prawa kolumna - historia zabiegów -->
+            <GroupBox Grid.Column="1" Header="Historia zabiegów" Padding="10" Margin="10,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <ListView.View>
-                <GridView>
+                    <ListView Grid.Row="0" x:Name="ZabiegiListView" Margin="0,0,0,10" BorderThickness="0"
+          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="140"
+                                            HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="💧 Typ zabiegu" FontSize="16" FontWeight="Bold" Foreground="#2E7D32"/>
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                    <!-- Data -->
-                    <GridViewColumn Width="120"
-                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                        <GridViewColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="📅 Data" FontSize="16" FontWeight="Bold" Foreground="#0277BD"/>
-                            </DataTemplate>
-                        </GridViewColumn.HeaderTemplate>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding DataWykonania, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#0277BD" Margin="5,2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                            <GridViewColumn Width="160"
+                                            HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="📅 Data wykonania" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DataWykonania, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                    <!-- Typ -->
-                    <GridViewColumn Width="150"
-                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                        <GridViewColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="🔧 Typ" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
-                            </DataTemplate>
-                        </GridViewColumn.HeaderTemplate>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#000000" Margin="5,2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <!-- Opis -->
-                    <GridViewColumn Width="475"
-                                    HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                        <GridViewColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="📝 Opis" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
-                            </DataTemplate>
-                        </GridViewColumn.HeaderTemplate>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Opis}" FontSize="15" Foreground="#000000" Margin="5,2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                </GridView>
-            </ListView.View>
-
-                           
-                           <ListView.Resources>
-                                <Style TargetType="GridViewColumnHeader">
-                                    <Setter Property="Background" Value="#E8F5E9"/>
-                                    <Setter Property="Padding" Value="10,5"/>
-                                    <Setter Property="FontWeight" Value="SemiBold"/>
-                                </Style>
-                           </ListView.Resources>
+                            <!-- Opis kolumna z automatycznym zawijaniem -->
+                            <GridViewColumn HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
+                                <GridViewColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="📝 Opis" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                    </DataTemplate>
+                                </GridViewColumn.HeaderTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Opis}" FontSize="15" Foreground="#000000" Margin="5,2"
+                                                   TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
                 </ListView>
 
-                        <Button Grid.Row="1" Content="💧 Dodaj zabieg" Click="DodajZabieg_Click" HorizontalAlignment="Right" Height="35" Width="100" Background="#9C27B0"/>
-                    </Grid>
-                </GroupBox>
-            </Grid>
 
-            <!-- Przyciski -->
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-                <Button Content="Edytuj" Click="EdytujRosline_Click" Width="90"  Margin="0,0,15,0" Background="#FFA726"/>
-                <Button Content="Zamknij" IsCancel="True" Width="90" Height="30" Background="#b20001"/>
-            </StackPanel>
+                    <Button Grid.Row="1" Content="Dodaj zabieg" Click="DodajZabieg_Click" HorizontalAlignment="Right" Width="120" Height="35" Background="#4CAF50"/>
+                </Grid>
+            </GroupBox>
         </Grid>
-    </Border>
+
+        <!-- Przyciski -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Edytuj roślinę" Click="EdytujRosline_Click" Width="120" Height="35" Margin="0,0,10,0" Background="#FFA726"/>
+            <Button Content="Zamknij" IsCancel="True" Width="100" Height="35" Background="#F44336"/>
+        </StackPanel>
+    </Grid>
 </Window>

@@ -90,6 +90,21 @@
 
                     <TextBlock Text="Data zakupu" Style="{StaticResource LabelStyle}"/>
                     <DatePicker x:Name="DataZakupuDatePicker"/>
+                    
+                    <!-- Sekcja zdjęcia -->
+                    <TextBlock Text="Zdjęcie rośliny:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ZdjeciePathTextBox" IsReadOnly="True" Padding="5" Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="Wybierz zdjęcie" Click="WybierzZdjecie_Click" Padding="10,5"/>
+                    </Grid>
+                    
+                    <Border BorderBrush="#CCCCCC" BorderThickness="1" Margin="0,0,0,15" Height="200">
+                        <Image x:Name="ZdjeciePreview" Stretch="Uniform" Margin="5"/>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
 

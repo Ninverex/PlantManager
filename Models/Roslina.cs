@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,6 +30,10 @@ namespace MenadzerRoslin.Models
         
         [ForeignKey("GatunekId")]
         public virtual Gatunek Gatunek { get; set; }
+        
+        // Dodane pole na ścieżkę do zdjęcia
+        [StringLength(255)]
+        public string? ZdjeciePath { get; set; }
         
         // Relacje jeden-do-wielu z Zabieg i Przypomnienie
         public virtual ICollection<Zabieg> Zabiegi { get; set; }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using Microsoft.EntityFrameworkCore;
 using MenadzerRoslin.Data;
 using MenadzerRoslin.Models;
@@ -29,8 +31,37 @@ namespace MenadzerRoslin.Views
                                      $"Światło: {_roslina.Gatunek.Swiatlo}\n" +
                                      $"Temperatura: {_roslina.Gatunek.TemperaturaMin}°C - {_roslina.Gatunek.TemperaturaMax}°C";
 
+            // Załadowanie zdjęcia, jeśli istnieje
+            LoadZdjecie();
+
             // Załadowanie historii zabiegów
             LoadZabiegi();
+        }
+
+        private void LoadZdjecie()
+        {
+            if (!string.IsNullOrEmpty(_roslina.ZdjeciePath) && File.Exists(_roslina.ZdjeciePath))
+            {
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(_roslina.ZdjeciePath);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    ZdjecieImage.Source = bitmap;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Błąd podczas ładowania zdjęcia: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ZdjecieImage.Source = null;
+                }
+            }
+            else
+            {
+                // Ustaw domyślne zdjęcie lub komunikat
+                ZdjecieImage.Source = null;
+            }
         }
 
         private void LoadZabiegi()
@@ -70,6 +101,9 @@ namespace MenadzerRoslin.Views
                                          $"Nawożenie co {_roslina.Gatunek.WymagaNawozeniaCoIleDni} dni\n" +
                                          $"Światło: {_roslina.Gatunek.Swiatlo}\n" +
                                          $"Temperatura: {_roslina.Gatunek.TemperaturaMin}°C - {_roslina.Gatunek.TemperaturaMax}°C";
+
+                // Załadowanie zdjęcia ponownie
+                LoadZdjecie();
 
                 DialogResult = true;
             }

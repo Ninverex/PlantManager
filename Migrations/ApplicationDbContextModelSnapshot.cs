@@ -105,8 +105,9 @@ namespace MenadzerRoslin.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Zdjecie")
-                        .HasColumnType("bytea");
+                    b.Property<string>("ZdjeciePath")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.HasKey("RoslinaId");
 
