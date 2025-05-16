@@ -1,0 +1,20 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.DotSettings.user
+
+# Visual Studio / IDE files
+.vs/
+.idea/
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.tmp
