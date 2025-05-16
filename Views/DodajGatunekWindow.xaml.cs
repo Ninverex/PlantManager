@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MenadzerRoslin.Data;
 using MenadzerRoslin.Models;
+using System.Text.RegularExpressions;
 
 namespace MenadzerRoslin.Views
 {
@@ -26,6 +27,12 @@ namespace MenadzerRoslin.Views
                 if (string.IsNullOrWhiteSpace(NazwaGatunkuTextBox.Text))
                 {
                     MessageBox.Show("Nazwa gatunku jest wymagana.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (!Regex.IsMatch(NazwaGatunkuTextBox.Text, @"^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż ]+$"))
+                {
+                    MessageBox.Show("Nazwa gatunku może zawierać tylko litery i spacje (bez cyfr i znaków specjalnych).", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
@@ -53,9 +60,21 @@ namespace MenadzerRoslin.Views
                     return;
                 }
 
+                if (tempMin < -10 || tempMin > 40)
+                {
+                    MessageBox.Show("Minimalna temperatura musi być w zakresie od -10 do 40°C.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 if (!double.TryParse(TempMaxTextBox.Text, out double tempMax))
                 {
                     MessageBox.Show("Podaj prawidłową maksymalną temperaturę.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (tempMax < -5 || tempMax > 50)
+                {
+                    MessageBox.Show("Maksymalna temperatura musi być w zakresie od -5 do 50°C.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 

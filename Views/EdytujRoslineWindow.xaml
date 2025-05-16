@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MenadzerRoslin"
         mc:Ignorable="d"
-        Title="Edytuj roślinę" Height="650" Width="600"
+        Title="Edytuj roślinę" MinWidth="450" MinHeight="550"
         WindowStartupLocation="CenterOwner">
     <Grid Margin="20">
         <Grid.RowDefinitions>

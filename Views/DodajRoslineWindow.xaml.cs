@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -82,6 +83,14 @@ namespace MenadzerRoslin
                 if (NazwaTextBox.Text.Length < 3)
                 {
                     MessageBox.Show("Nazwa rośliny musi mieć co najmniej 3 znaki.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Walidacja poprawności nazwy rośliny
+                var regex = new Regex(@"^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+(?: [A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+)?$");
+                if (!regex.IsMatch(NazwaTextBox.Text))
+                {
+                    MessageBox.Show("Nazwa rośliny może zawierać tylko litery oraz maksymalnie jedną spację między dwoma wyrazami. Znaki specjalne i cyfry są niedozwolone.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
