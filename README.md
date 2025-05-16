@@ -1,23 +1,54 @@
-# Menadżer Roślin 🌿
-Menadżer Roślin to aplikacja desktopowa WPF służąca do zarządzania kolekcją roślin, ich gatunkami oraz przypomnieniami o pielęgnacji (np. podlewaniu, nawożeniu). Projekt oparty jest o Entity Framework i umożliwia pełną kontrolę nad bazą danych lokalnych roślin.
+# 📘 Dokumentacja aplikacji **Menadżer Roślin**
 
-### Wymagania
-- .NET 9 
-- Visual Studio 2022 lub inny kompatybilny IDE
-- PostgreSQL z narzędziem `psql` (do importu bazy danych)
+## 🌱 Opis aplikacji
 
-## Funkcje  
-- 📋 Lista roślin i gatunków – przeglądaj, dodawaj i edytuj rośliny oraz gatunki.
+**Menadżer Roślin** to aplikacja desktopowa stworzona z wykorzystaniem technologii WPF oraz Entity Framework Core. Jej celem jest wspieranie użytkownika w zarządzaniu kolekcją roślin domowych lub ogrodowych poprzez:
 
-- 🔔 Przypomnienia – system przypomnień o koniecznych zabiegach pielęgnacyjnych (np. podlewanie, nawożenie).
+- Dodawanie, edytowanie i usuwanie roślin oraz gatunków.
+- Tworzenie przypomnień o potrzebnych zabiegach pielęgnacyjnych (np. podlewanie, nawożenie).
+- Przechowywanie historii wykonanych zabiegów.
+- Filtrowanie przypomnień według daty, typu zabiegu oraz statusu wykonania.
+- Automatyczne generowanie kolejnych przypomnień po wykonaniu zabiegu.
 
-- ✅ Obsługa wykonanych zabiegów – oznacz przypomnienie jako wykonane, a aplikacja automatycznie doda wpis do historii zabiegów i utworzy nowe przypomnienie na przyszłość.
+Aplikacja wspiera również interaktywne elementy UI jak listy, okna dialogowe i przyciski, umożliwiające sprawne zarządzanie danymi.
 
-- 🔄 Odświeżanie danych – aktualizuj listy roślin, gatunków i przypomnień bez ponownego uruchamiania aplikacji.
+## 🗃️ Opis bazy danych
 
-- 👁️ Szczegóły rośliny – podgląd i edycja szczegółowych informacji o wybranej roślinie.
+Baza danych została zaprojektowana z myślą o prostocie i wydajności. Składa się z następujących głównych tabel:
 
-- 🧪 Obsługa wyjątków i komunikatów użytkownika – aplikacja reaguje na błędy i informuje użytkownika o sukcesie operacji.
+### `Rosliny`
+- **RoslinaId** (PK): Identyfikator rośliny.
+- **Nazwa**: Nazwa rośliny.
+- **DataZakupu**: Data zakupu rośliny.
+- **Miejsce**: Lokalizacja rośliny.
+- **GatunekId** (FK): Powiązanie z tabelą `Gatunki`.
+
+### `Gatunki`
+- **GatunekId** (PK): Identyfikator gatunku.
+- **Nazwa**: Nazwa gatunku.
+- **WymagaNawadnianiaCoIleDni**: Częstotliwość podlewania.
+- **WymagaNawozeniaCoIleDni**: Częstotliwość nawożenia.
+
+### `Przypomnienia`
+- **PrzypomnienieId** (PK): Identyfikator przypomnienia.
+- **RoslinaId** (FK): Powiązanie z rośliną.
+- **TypZabiegu**: Rodzaj zabiegu (np. Podlewanie, Nawożenie).
+- **DataPlanowana**: Planowana data wykonania.
+- **CzyWykonane**: Status wykonania (bool).
+
+### `Zabiegi`
+- **ZabiegId** (PK): Identyfikator zabiegu.
+- **RoslinaId** (FK): Powiązanie z rośliną.
+- **TypZabiegu**: Typ wykonanego zabiegu.
+- **DataWykonania**: Data wykonania zabiegu.
+- **Opis**: Dodatkowy opis.
+
+Relacje:
+- Każda **Roślina** może posiadać wiele **Przypomnień** i **Zabiegów**.
+- Każda **Roślina** należy do jednego **Gatunku**.
+
+![image](https://github.com/user-attachments/assets/1c0b8445-9baa-4ac9-8b75-78f2dac90fe9)  
+
 
 ## Instrukcja uruchomienia
 
@@ -72,6 +103,53 @@ Wybierz projekt `MenadzerRoslin` jako startowy i kliknij **Start** lub naciśnij
 - Projekt jest aplikacją WPF, więc po uruchomieniu powinno pojawić się okno aplikacji.
 - Jeśli pojawią się błędy, sprawdź poprawność przywrócenia pakietów NuGet i konfiguracji bazy danych.
 
+## 🧭 Instrukcja obsługi
+
+Po uruchomieniu aplikacji użytkownik ma dostęp do głównego okna, w którym znajdują się listy roślin, gatunków oraz przypomnień. Oto podstawowe funkcje:
+
+### ➕ Dodawanie rośliny
+1. Kliknij przycisk `Dodaj Roślinę`.
+2. Wypełnij formularz z nazwą, datą zakupu, miejscem, wybierz gatunek oraz opcjonalnie załącz zdjęcie.
+3. Zatwierdź, aby dodać roślinę do bazy.
+
+### 📝 Edycja rośliny
+1. Zaznacz roślinę z listy.
+2. Kliknij `Edytuj`.
+3. Wprowadź zmiany i zapisz.
+
+### ❌ Usuwanie rośliny
+1. Wybierz roślinę z listy.
+2. Kliknij `Usuń`, potwierdź operację.
+3. Aplikacja automatycznie usunie powiązane przypomnienia i zabiegi.
+
+### 🔍 Szczegóły rośliny
+- Kliknij podwójnie lub wybierz roślinę i kliknij `Szczegóły`, aby otworzyć okno ze wszystkimi informacjami.
+
+### 🧬 Zarządzanie gatunkami
+- Kliknij `Dodaj Gatunek`, aby otworzyć formularz nowego gatunku.
+
+### ⏰ Przypomnienia
+- Lista przypomnień pokazuje nadchodzące zabiegi pielęgnacyjne.
+- Zastosuj filtry: daty, typ zabiegu i status (`Do wykonania`, `Wykonane`, `Wszystkie`).
+- Kliknij `Odswież`, aby ponownie załadować dane z bazy.
+- Zaznacz przypomnienie (`checkbox`), aby oznaczyć jako wykonane — aplikacja automatycznie utworzy nowy wpis w historii zabiegów i przypomnienie na przyszłość.
+
+### 🧹 Czyszczenie filtrów
+- Kliknij `Wyczyść filtry`, aby usunąć wszystkie warunki filtrowania przypomnień.
+
+
+### 💉 Dodawanie zabiegu pielęgnacyjnego
+
+1. Otwórz szczegóły wybranej rośliny lub wybierz opcję `Dodaj zabieg` (jeśli dostępna).
+2. W nowym oknie:
+   - Wybierz typ zabiegu (np. Podlewanie, Nawożenie, Przycinanie).
+   - Wskaż datę jego wykonania (nie może być w przyszłości).
+   - Opcjonalnie dodaj opis wykonania.
+   - Zaznacz checkbox `Dodaj przypomnienie`, jeśli chcesz, aby aplikacja automatycznie utworzyła przypomnienie na podstawie interwału dla danego gatunku.
+3. Kliknij `Dodaj`, aby zatwierdzić.
+
+> Jeśli zaznaczono opcję przypomnienia, aplikacja automatycznie wyliczy datę kolejnego zabiegu na podstawie interwałów zdefiniowanych dla danego gatunku (np. co ile dni należy podlewać lub nawozić roślinę) i doda przypomnienie.
+---
 
 ## Widoki:
 - widok główny:  
