@@ -14,6 +14,30 @@
         <Style x:Key="NonResizableHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="IsHitTestVisible" Value="False"/>
         </Style>
+        
+        <!-- Style dla GroupBox zapewniający responsywność -->
+        <Style x:Key="ResponsiveGroupBox" TargetType="{x:Type GroupBox}">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+        
+        <!-- Style dla etykiet -->
+        <Style x:Key="LabelStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        
+        <!-- Style dla wartości -->
+        <Style x:Key="ValueStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="20">
@@ -27,64 +51,51 @@
         <TextBlock Grid.Row="0" x:Name="NazwaTextBlock" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="#2E7D32"
                    TextWrapping="Wrap" HorizontalAlignment="Stretch"/>
 
-        <!-- ScrollViewer z zawartością -->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <!-- Użyj Star zamiast sztywnych wartości, aby układ dostosowywał się do rozmiaru okna -->
-                    <ColumnDefinition Width="*" MinWidth="250"/>
-                    <ColumnDefinition Width="*" MinWidth="250"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Lewa kolumna -->
-                <StackPanel Grid.Column="0" Margin="0,0,10,0" HorizontalAlignment="Stretch">
-                    <GroupBox Header="Informacje podstawowe" Padding="10" Margin="0,0,0,15" HorizontalAlignment="Stretch">
-                        <StackPanel>
-                            <Grid Margin="0,5" HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120" MaxWidth="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Gatunek:" FontWeight="SemiBold" FontSize="15" Margin="0,0,10,0" 
-                                           TextWrapping="Wrap"/>
-                                <TextBlock Grid.Column="1" x:Name="GatunekTextBlock" FontSize="15" TextWrapping="Wrap"/>
-                            </Grid>
+        <!-- Główna zawartość z możliwością przewijania -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="250"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Lewa kolumna z możliwością przewijania -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,5,0">
+                <StackPanel HorizontalAlignment="Stretch">
+                    <!-- Informacje podstawowe -->
+                    <GroupBox Header="Informacje podstawowe" Style="{StaticResource ResponsiveGroupBox}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="120" MaxWidth="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
                             
-                            <Grid Margin="0,5" HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120" MaxWidth="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Miejsce:" FontWeight="SemiBold" FontSize="15" Margin="0,0,10,0" 
-                                           TextWrapping="Wrap"/>
-                                <TextBlock Grid.Column="1" x:Name="MiejsceTextBlock" FontSize="15" TextWrapping="Wrap"/>
-                            </Grid>
-
-                            <Grid Margin="0,5" HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="120" MaxWidth="150"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Data zakupu:" FontWeight="SemiBold" FontSize="15" Margin="0,0,10,0" 
-                                           TextWrapping="Wrap"/>
-                                <TextBlock Grid.Column="1" x:Name="DataZakupuTextBlock" FontSize="15" TextWrapping="Wrap"/>
-                            </Grid>
-                        </StackPanel>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Gatunek:" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="GatunekTextBlock" Style="{StaticResource ValueStyle}"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Miejsce:" Style="{StaticResource LabelStyle}" Margin="0,10,10,0"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="MiejsceTextBlock" Style="{StaticResource ValueStyle}" Margin="0,10,0,0"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Data zakupu:" Style="{StaticResource LabelStyle}" Margin="0,10,10,0"/> 
+                            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DataZakupuTextBlock" Style="{StaticResource ValueStyle}" Margin="0,10,0,0"/>
+                        </Grid>
                     </GroupBox>
 
-                    <GroupBox Header="Wymagania pielęgnacyjne" Padding="10" Margin="0,0,0,15" HorizontalAlignment="Stretch">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                    <!-- Wymagania pielęgnacyjne -->
+                    <GroupBox Header="Wymagania pielęgnacyjne" Style="{StaticResource ResponsiveGroupBox}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" HorizontalScrollBarVisibility="Auto">
                             <TextBlock x:Name="WymaganiaTextBlock" TextWrapping="Wrap" FontSize="15"/>
                         </ScrollViewer>
                     </GroupBox>
 
-                    <GroupBox Header="Zdjęcie rośliny" Padding="10" Margin="0,0,0,15" HorizontalAlignment="Stretch">
+                    <!-- Zdjęcie rośliny -->
+                    <GroupBox Header="Zdjęcie rośliny" Style="{StaticResource ResponsiveGroupBox}">
                         <Border BorderBrush="#CCCCCC" BorderThickness="1" HorizontalAlignment="Stretch">
                             <Grid>
-                                <Grid.RowDefinitions>
-                                    <!-- Użyj Star zamiast sztywnych wartości -->
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
                                 <Viewbox Stretch="Uniform" MaxHeight="275" StretchDirection="DownOnly">
                                     <Image x:Name="ZdjecieImage" Margin="5"/>
                                 </Viewbox>
@@ -92,80 +103,76 @@
                         </Border>
                     </GroupBox>
                 </StackPanel>
+            </ScrollViewer>
 
-                <!-- Prawa kolumna -->
-                <GroupBox Grid.Column="1" Header="Historia zabiegów" Padding="10" Margin="10,0,0,0" 
-                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+            <!-- Separator między kolumnami -->
+            <GridSplitter Grid.Column="0" Width="5" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
 
-                        <ListView Grid.Row="0" x:Name="ZabiegiListView" Margin="0,0,0,10" BorderThickness="0"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Auto" 
-                                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.View>
-                                <GridView x:Name="ZabiegiGridView">
-                                    <GridViewColumn 
-                                            HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                                        <GridViewColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="💧 Typ zabiegu" FontSize="16" FontWeight="Bold" Foreground="#2E7D32" Width="150"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.HeaderTemplate>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+            <!-- Prawa kolumna z historią zabiegów -->
+            <GroupBox Grid.Column="1" Header="Historia zabiegów" Style="{StaticResource ResponsiveGroupBox}" Margin="5,0,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                                    <GridViewColumn
-                                            HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                                        <GridViewColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="📅 Data wykonania" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.HeaderTemplate>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding DataWykonania, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#000000" Margin="5,2"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
+                    <!-- Lista zabiegów z możliwością dostosowania szerokości kolumn -->
+                    <ListView Grid.Row="0" x:Name="ZabiegiListView" Margin="0,0,0,10" BorderThickness="0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              HorizontalAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView x:Name="ZabiegiGridView">
+                                <GridViewColumn Width="Auto">
+                                    <GridViewColumn.Header>
+                                        <TextBlock Text="💧 Typ zabiegu" FontSize="16" FontWeight="Bold" Foreground="#2E7D32"/>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TypZabiegu}" FontSize="15" Foreground="#2E7D32" Margin="5,2"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
 
-                                    <GridViewColumn
-                                            HeaderContainerStyle="{StaticResource NonResizableHeaderStyle}">
-                                        <GridViewColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="📝 Opis" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.HeaderTemplate>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Opis}" FontSize="15" Foreground="#000000" Margin="5,2"
-                                                       TextWrapping="Wrap" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                                <GridViewColumn Width="Auto">
+                                    <GridViewColumn.Header>
+                                        <TextBlock Text="📅 Data wykonania" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DataWykonania, StringFormat={}{0:dd.MM.yyyy}}" FontSize="15" Foreground="#000000" Margin="5,2"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
 
-                        <Button Grid.Row="1" Content="Dodaj zabieg" Click="DodajZabieg_Click" 
-                                HorizontalAlignment="Right" Width="120" Height="35" Background="#4CAF50"/>
-                    </Grid>
-                </GroupBox>
-            </Grid>
-        </ScrollViewer>
+                                <GridViewColumn Width="Auto">
+                                    <GridViewColumn.Header>
+                                        <TextBlock Text="📝 Opis" FontSize="16" FontWeight="Bold" Foreground="#000000"/>
+                                    </GridViewColumn.Header>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Opis}" FontSize="15" Foreground="#000000" Margin="5,2"
+                                                       TextWrapping="Wrap" MaxWidth="300"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
 
-        <!-- Przyciski -->
+                    <!-- Przycisk dodawania zabiegu -->
+                    <Button Grid.Row="1" Content="Dodaj zabieg" Click="DodajZabieg_Click" 
+                            HorizontalAlignment="Right" Width="120" Height="35" Background="#4CAF50"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <!-- Przyciski dolne -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
             <Button Content="Edytuj roślinę" Click="EdytujRosline_Click" Width="120" Height="35" Margin="0,0,10,0" Background="#FFA726"/>
             <Button Content="Zamknij" IsCancel="True" Width="100" Height="35" Background="#F44336"/>

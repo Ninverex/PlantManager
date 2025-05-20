@@ -118,7 +118,7 @@ namespace MenadzerRoslin
                     return;
                 }
 
-                // Kopiowanie zdjęcia do folderu aplikacji, jeśli zostało wybrane
+                // Kopiowanie zdjęcia do folderu aplikacji
                 string zdjeciePath = null;
                 if (!string.IsNullOrEmpty(_selectedImagePath))
                 {
