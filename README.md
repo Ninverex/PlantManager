@@ -73,6 +73,7 @@ dotnet restore
 - Projekt korzysta z migracji Entity Framework Core, więc najpierw należy utworzyć i zaktualizować bazę danych za pomocą migracji:
 
 ```bash
+dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
