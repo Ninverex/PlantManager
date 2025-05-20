@@ -77,22 +77,10 @@ dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
 
-- Jeśli z jakiegoś powodu wolisz użyć pliku `menadzerroslindatabase.sql`, możesz zaimportować go ręcznie do PostgreSQL:
+- w celu dodania przykładowych danych należy użyc pliku `dane.sql`, możesz zaimportować go ręcznie do PostgreSQL:
 
   1. Upewnij się, że masz zainstalowany PostgreSQL oraz narzędzia `psql`.
-  2. Utwórz bazę danych:
-     ```bash
-     createdb menadzerroslin
-     ```
-  3. Zaimportuj skrypt:
-     ```bash
-     psql -d menadzerroslin -f menadzerroslindatabase.sql
-     ```
-  4. W pliku `appsettings.json` zmodyfikuj connection string tak, aby wskazywał na tę bazę, np.:
-     ```json
-     "ConnectionStrings": {
-       "DefaultConnection": "Host=localhost;Port=5432;Database=menadzerroslin;Username=twoj_uzytkownik;Password=twoje_haslo"
-     }
+  2. Zaimportuj plik
      ```
 
 ### 5. Uruchom aplikację
