@@ -80,8 +80,10 @@ dotnet ef database update
 - w celu dodania przykładowych danych należy użyc pliku `dane.sql`, możesz zaimportować go ręcznie do PostgreSQL:
 
   1. Upewnij się, że masz zainstalowany PostgreSQL oraz narzędzia `psql`.
-  2. Zaimportuj plik
-     ```
+  2. Wykonaj poniższe polecenie, podmieniając odpowiednie dane:
+
+  ```bash
+  psql -U nazwa_uzytkownika -d nazwa_bazy -f dane.sql
 
 ### 5. Uruchom aplikację
 Wybierz projekt `MenadzerRoslin` jako startowy i kliknij **Start** lub naciśnij **F5**.
