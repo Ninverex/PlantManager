@@ -215,16 +215,16 @@ COPY public."Przypomnienia" ("PrzypomnienieId", "RoslinaId", "TypZabiegu", "Data
 --
 
 COPY public."Rosliny" ("RoslinaId", "Nazwa", "DataZakupu", "Miejsce", "GatunekId", "ZdjeciePath") FROM stdin;
-52	Fikus benjamina	2025-05-16 00:00:00	Łazienka	20	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\c6f3ab0c-56e3-4a3e-8075-8b34a1e2ad35.jpg
-51	Fikus sprężysty	2025-05-06 00:00:00	Balkon	20	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\aa8eb427-a311-40b6-b2c9-4aaab1b8a611.jpg
-45	Róża damasceńska	2025-02-05 00:00:00	Biurko	17	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\eb269667-dfb1-4a2c-9639-7737379c2586.jpg
-49	Lawenda wąskolistna	2025-03-05 00:00:00	Taras	19	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\3a4b6b89-2fdb-49dd-b4ba-e4f85c2691d3.jpg
-43	Dąb szypułkowy	2025-05-16 00:00:00	Balkon	16	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\2588a11e-a585-4bfa-acec-762824e6227f.jpg
-44	Dąb bezszypułkowy	2025-05-16 00:00:00	Kuchnia	16	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\ce95df35-dd93-4120-a967-e60f79174212.jpg
-46	Róża pomarszczona	2025-05-16 00:00:00	Sypialnia	17	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\c952badd-900a-4dad-87bd-d4475635bd7f.jpg
-47	Sosna zwyczajna	2025-05-16 00:00:00	Inne	18	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\cad42c87-bd7c-49a2-bd45-20bcfcb2166a.jpg
-48	Sosna górska	2025-05-16 00:00:00	Biuro	18	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\00b9e43b-5f80-444f-8ea2-b4703e13dae2.jpg
-50	Lawenda francuska	2025-05-16 00:00:00	Balkon	19	C:\\Users\\Maciek\\Desktop\\studia\\c#\\PlanterManager\\MenadzerRoslin\\bin\\Debug\\net9.0-windows\\Images\\4eb0a18c-12ca-4123-b5a8-1ce823ba83b7.jpg
+52	Fikus benjamina	2025-05-16 00:00:00	Łazienka	20	\N
+51	Fikus sprężysty	2025-05-06 00:00:00	Balkon	20	\N
+45	Róża damasceńska	2025-02-05 00:00:00	Biurko	17	\N
+49	Lawenda wąskolistna	2025-03-05 00:00:00	Taras	19	\N
+43	Dąb szypułkowy	2025-05-16 00:00:00	Balkon	16	\N
+44	Dąb bezszypułkowy	2025-05-16 00:00:00	Kuchnia	16	\N
+46	Róża pomarszczona	2025-05-16 00:00:00	Sypialnia	17	\N
+47	Sosna zwyczajna	2025-05-16 00:00:00	Inne	18	\N
+48	Sosna górska	2025-05-16 00:00:00	Biuro	18	\N
+50	Lawenda francuska	2025-05-16 00:00:00	Balkon	19	\N
 \.
 
 
